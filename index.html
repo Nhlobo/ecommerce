@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* Modern CSS */
         :root {
             --primary-color: #8B4513;
             --secondary-color: #5C4033;
@@ -31,6 +32,7 @@
             font-family: var(--font-heading);
         }
 
+        /* Navigation */
         nav {
             background: var(--secondary-color);
             color: white;
@@ -51,7 +53,6 @@
         .cart-icon {
             position: relative;
             cursor: pointer;
-            font-size: 1.5rem;
         }
 
         .cart-count {
@@ -69,10 +70,11 @@
             font-size: 0.7rem;
         }
 
+        /* Hero Section */
         .hero {
             padding: 4rem 2rem;
             text-align: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://picsum.photos/1920/600?random=1');
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://via.placeholder.com/1920x600/8B4513/FFFFFF?text=Hero+Background');
             background-size: cover;
             color: white;
         }
@@ -93,7 +95,6 @@
             justify-content: center;
             gap: 2rem;
             margin-top: 2rem;
-            flex-wrap: wrap;
         }
 
         .hero-item {
@@ -102,11 +103,10 @@
             padding: 1rem;
             border-radius: 10px;
             backdrop-filter: blur(5px);
-            max-width: 350px;
         }
 
         .hero-item img {
-            width: 100%;
+            width: 300px;
             height: 250px;
             object-fit: cover;
             border-radius: 10px;
@@ -126,13 +126,13 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background 0.3s ease;
-            width: 100%;
         }
 
         .hero-item button:hover {
             background: var(--secondary-color);
         }
 
+        /* Testimonials */
         .testimonials {
             padding: 4rem 2rem;
             background: white;
@@ -166,28 +166,22 @@
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 1rem;
+            margin-bottom: 1rem;
         }
 
+        /* Product Showcase */
         .product-showcase {
             padding: 4rem 2rem;
             background: var(--light-color);
             display: flex;
             align-items: center;
             gap: 3rem;
-            flex-wrap: wrap;
         }
 
         .product-showcase img {
-            width: 100%;
-            max-width: 500px;
+            width: 50%;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .showcase-content {
-            flex: 1;
-            min-width: 300px;
         }
 
         .showcase-content h2 {
@@ -196,12 +190,12 @@
             color: var(--secondary-color);
         }
 
+        /* Cart Modal */
         .cart-modal {
             position: fixed;
             top: 0;
-            right: -100%;
-            width: 100%;
-            max-width: 400px;
+            right: -400px;
+            width: 400px;
             height: 100%;
             background: white;
             box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
@@ -217,7 +211,6 @@
         .cart-modal h2 {
             margin-bottom: 1rem;
             color: var(--secondary-color);
-            text-align: center;
         }
 
         .cart-item {
@@ -232,26 +225,15 @@
             height: 60px;
             object-fit: cover;
             margin-right: 1rem;
-            border-radius: 5px;
         }
 
         .cart-total {
             margin-top: 1rem;
             font-weight: bold;
             font-size: 1.2rem;
-            text-align: right;
         }
 
-        .close-cart {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
+        /* Footer */
         .footer {
             background: var(--secondary-color);
             color: white;
@@ -313,11 +295,8 @@
             cursor: pointer;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
             .hero-images {
                 flex-direction: column;
                 align-items: center;
@@ -325,11 +304,10 @@
 
             .product-showcase {
                 flex-direction: column;
-                text-align: center;
             }
 
-            .cart-modal {
-                max-width: 100%;
+            .product-showcase img {
+                width: 100%;
             }
         }
     </style>
@@ -348,12 +326,12 @@
         <h1>TOP COLLECTION</h1>
         <div class="hero-images">
             <div class="hero-item">
-                <img src="https://picsum.photos/400/300?random=2" alt="Wigs">
-                <button onclick="addToCart('Wigs', 150, 'https://picsum.photos/60/60?random=2')">SHOP NOW</button>
+                <img src="https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Wigs" alt="Wigs">
+                <button onclick="addToCart('Wigs', 150)">SHOP NOW</button>
             </div>
             <div class="hero-item">
-                <img src="https://picsum.photos/400/300?random=3" alt="Bundles">
-                <button onclick="addToCart('Bundles', 200, 'https://picsum.photos/60/60?random=3')">SHOP NOW</button>
+                <img src="https://via.placeholder.com/400x300/000000/FFFFFF?text=Bundles" alt="Bundles">
+                <button onclick="addToCart('Bundles', 200)">SHOP NOW</button>
             </div>
         </div>
     </section>
@@ -363,13 +341,13 @@
         <h2>DON'T JUST TAKE OUR WORD FOR IT...</h2>
         <div class="testimonial-cards">
             <div class="testimonial-card">
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Kia">
+                <img src="https://via.placeholder.com/150/8B4513/FFFFFF?text=Kia" alt="Kia">
                 <p>I've Purchased Wigs From Many Different Brands Over The Years, But This One Truly Stands Out. Hair Bubbles Is The Best.</p>
                 <h4>Kia</h4>
                 <p>@Thebubbleskia</p>
             </div>
             <div class="testimonial-card">
-                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Gloria">
+                <img src="https://via.placeholder.com/150/8B4513/FFFFFF?text=Gloria" alt="Gloria">
                 <p>From The Fast Delivery To The Premium Packaging, Everything About This Brand Feels Professional And Reliable.</p>
                 <h4>Gloria</h4>
                 <p>@Thehairlovereia</p>
@@ -381,14 +359,13 @@
     <section class="product-showcase">
         <div class="showcase-content">
             <h2>Enhance Your Natural Beauty With Our Exquisite Wigs</h2>
-            <button onclick="addToCart('Exquisite Wigs', 250, 'https://picsum.photos/60/60?random=4')">SHOP NOW</button>
+            <button onclick="addToCart('Exquisite Wigs', 250)">SHOP NOW</button>
         </div>
-        <img src="https://picsum.photos/600/400?random=5" alt="Wig Model">
+        <img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=Wig+Model" alt="Wig Model">
     </section>
 
     <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
-        <button class="close-cart" onclick="toggleCart()">×</button>
         <h2>Your Cart</h2>
         <div id="cartItems"></div>
         <div class="cart-total">Total: $<span id="cartTotal">0</span></div>
@@ -437,8 +414,8 @@
             cartModal.classList.toggle('open');
         }
 
-        function addToCart(productName, price, imageUrl) {
-            cart.push({ productName, price, imageUrl });
+        function addToCart(productName, price) {
+            cart.push({ productName, price });
             updateCart();
             alert(`${productName} added to cart!`);
         }
@@ -451,28 +428,22 @@
             cartItemsElement.innerHTML = '';
             let total = 0;
 
-            cart.forEach((item, index) => {
+            cart.forEach(item => {
                 total += item.price;
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
                 itemElement.innerHTML = `
-                    <img src="${item.imageUrl}" alt="${item.productName}">
-                    <div style="flex: 1;">
+                    <img src="https://via.placeholder.com/60/8B4513/FFFFFF?text=${item.productName}" alt="${item.productName}">
+                    <div>
                         <h4>${item.productName}</h4>
                         <p>$${item.price}</p>
                     </div>
-                    <button onclick="removeFromCart(${index})" style="background: #ff6b6b; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 5px; cursor: pointer;">Remove</button>
                 `;
                 cartItemsElement.appendChild(itemElement);
             });
 
             cartTotalElement.textContent = total;
             cartCountElement.textContent = cart.length;
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCart();
         }
     </script>
 </body>
