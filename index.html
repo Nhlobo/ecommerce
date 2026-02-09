@@ -1,316 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Hair Bubbles</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hair Boutique - Premium Wigs & Bundles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #5C4033;
+            --accent-color: #D2B48C;
+            --light-color: #F5F5F5;
+            --dark-color: #333;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Poppins', sans-serif;
+        }
 
-<style>
-/* RESET */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Georgia, serif;
-}
+        body {
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+            line-height: 1.6;
+            background-color: var(--light-color);
+        }
 
-body {
-  background: #f3e2c7;
-  color: #1f1f1f;
-}
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+        }
 
-/* TOP BAR */
-.top-bar {
-  background: #000;
-  color: #fff;
-  text-align: center;
-  padding: 8px;
-  font-size: 14px;
-}
+        nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-/* NAVBAR */
-.navbar {
-  background: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 60px;
-}
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
 
-.logo {
-  font-size: 26px;
-  font-weight: bold;
-}
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
 
-nav a {
-  margin: 0 12px;
-  text-decoration: none;
-  color: #000;
-  font-size: 15px;
-}
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+        }
 
-.icons {
-  font-size: 18px;
-}
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://picsum.photos/1920/600?random=1');
+            background-size: cover;
+            color: white;
+        }
 
-/* HERO */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px;
-}
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s ease-in-out;
+        }
 
-.hero-text {
-  max-width: 50%;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.hero-text p {
-  font-size: 14px;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-}
+        .hero-images {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
 
-.hero-text h1 {
-  font-size: 46px;
-  line-height: 1.2;
-  margin-bottom: 25px;
-}
+        .hero-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            max-width: 350px;
+        }
 
-.hero img {
-  width: 420px;
-}
+        .hero-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
 
-/* BUTTONS */
-.btn {
-  padding: 12px 30px;
-  border: 2px solid #000;
-  background: transparent;
-  cursor: pointer;
-  font-size: 14px;
-}
+        .hero-item img:hover {
+            transform: scale(1.05);
+        }
 
-.btn.dark {
-  background: #000;
-  color: #fff;
-}
+        .hero-item button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
 
-/* SECTIONS */
-section {
-  padding: 60px;
-  text-align: center;
-}
+        .hero-item button:hover {
+            background: var(--secondary-color);
+        }
 
-h2 {
-  font-size: 32px;
-}
+        .testimonials {
+            padding: 4rem 2rem;
+            background: white;
+        }
 
-/* COLLECTIONS */
-.collection-grid,
-.product-grid,
-.why-grid,
-.blog-grid,
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 30px;
-  margin-top: 30px;
-}
+        .testimonials h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+        }
 
-.collection-card,
-.product-card,
-.blog-card {
-  background: #fff;
-  padding: 25px;
-}
+        .testimonial-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
 
-/* PRODUCTS */
-.product-card img {
-  width: 100%;
-  margin-bottom: 15px;
-}
+        .testimonial-card {
+            max-width: 350px;
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-.product-card button {
-  margin-top: 10px;
-  padding: 8px 16px;
-}
+        .testimonial-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+        }
 
-/* PROMO */
-.promo {
-  background: #e6d0b1;
-}
+        .product-showcase {
+            padding: 4rem 2rem;
+            background: var(--light-color);
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
 
-/* NEWSLETTER */
-.newsletter input {
-  padding: 10px;
-  width: 260px;
-  margin-top: 15px;
-}
+        .product-showcase img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-/* FOOTER */
-footer {
-  background: #000;
-  color: #fff;
-  padding: 40px;
-}
+        .showcase-content {
+            flex: 1;
+            min-width: 300px;
+        }
 
-footer p {
-  margin-top: 10px;
-}
+        .showcase-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+        }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-  }
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 1rem;
+        }
 
-  .hero-text {
-    max-width: 100%;
-    margin-bottom: 30px;
-  }
+        .cart-modal.open {
+            right: 0;
+        }
 
-  .navbar {
-    flex-direction: column;
-    gap: 15px;
-  }
-}
-</style>
+        .cart-modal h2 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 1rem;
+            border-radius: 5px;
+        }
+
+        .cart-total {
+            margin-top: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: right;
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .footer {
+            background: var(--secondary-color);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            padding: 0 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-column ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .newsletter-form button {
+            padding: 0.7rem 1rem;
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-images {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .product-showcase {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cart-modal {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Hair Boutique</div>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </div>
+    </nav>
 
-<!-- 1. TOP BAR -->
-<div class="top-bar">
-  Limited Time Offer! Get 20% Off All Purchases
-</div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>TOP COLLECTION</h1>
+        <div class="hero-images">
+            <div class="hero-item">
+                <img src="https://picsum.photos/400/300?random=2" alt="Wigs">
+                <button onclick="addToCart('Wigs', 150, 'https://picsum.photos/60/60?random=2')">SHOP NOW</button>
+            </div>
+            <div class="hero-item">
+                <img src="https://picsum.photos/400/300?random=3" alt="Bundles">
+                <button onclick="addToCart('Bundles', 200, 'https://picsum.photos/60/60?random=3')">SHOP NOW</button>
+            </div>
+        </div>
+    </section>
 
-<!-- 2. NAVBAR -->
-<header class="navbar">
-  <div class="logo">Hair Bubbles</div>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Shop</a>
-    <a href="#">Collection</a>
-    <a href="#">Blog</a>
-    <a href="#">Sale</a>
-    <a href="#">Contact</a>
-  </nav>
-  <div class="icons">🔍 🛒</div>
-</header>
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>DON'T JUST TAKE OUR WORD FOR IT...</h2>
+        <div class="testimonial-cards">
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Kia">
+                <p>I've Purchased Wigs From Many Different Brands Over The Years, But This One Truly Stands Out. Hair Bubbles Is The Best.</p>
+                <h4>Kia</h4>
+                <p>@Thebubbleskia</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Gloria">
+                <p>From The Fast Delivery To The Premium Packaging, Everything About This Brand Feels Professional And Reliable.</p>
+                <h4>Gloria</h4>
+                <p>@Thehairlovereia</p>
+            </div>
+        </div>
+    </section>
 
-<!-- 3. HERO -->
-<section class="hero">
-  <div class="hero-text">
-    <p>Discover Your Perfect Look</p>
-    <h1>
-      Enhance Your Natural <br>
-      Beauty With Our <br>
-      Exquisite Wigs
-    </h1>
-    <button class="btn">SHOP NOW</button>
-  </div>
-  <img src="images/model.jpg" alt="Model">
-</section>
+    <!-- Product Showcase -->
+    <section class="product-showcase">
+        <div class="showcase-content">
+            <h2>Enhance Your Natural Beauty With Our Exquisite Wigs</h2>
+            <button onclick="addToCart('Exquisite Wigs', 250, 'https://picsum.photos/60/60?random=4')">SHOP NOW</button>
+        </div>
+        <img src="https://picsum.photos/600/400?random=5" alt="Wig Model">
+    </section>
 
-<!-- 4. COLLECTIONS -->
-<section>
-  <h2>Our Collections</h2>
-  <div class="collection-grid">
-    <div class="collection-card">Curly Wigs</div>
-    <div class="collection-card">Straight Wigs</div>
-    <div class="collection-card">Body Wave</div>
-  </div>
-</section>
-
-<!-- 5. PRODUCTS -->
-<section>
-  <h2>Featured Products</h2>
-  <div class="product-grid">
-    <div class="product-card">
-      <img src="images/wig1.jpg">
-      <h3>Luxury Curly Wig</h3>
-      <p>R1,200</p>
-      <button>Add to Cart</button>
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <button class="close-cart" onclick="toggleCart()">×</button>
+        <h2>Your Cart</h2>
+        <div id="cartItems"></div>
+        <div class="cart-total">Total: $<span id="cartTotal">0</span></div>
     </div>
-    <div class="product-card">
-      <img src="images/wig2.jpg">
-      <h3>Straight Human Hair</h3>
-      <p>R1,450</p>
-      <button>Add to Cart</button>
-    </div>
-    <div class="product-card">
-      <img src="images/wig3.jpg">
-      <h3>Body Wave Lace</h3>
-      <p>R1,650</p>
-      <button>Add to Cart</button>
-    </div>
-  </div>
-</section>
 
-<!-- 6. PROMO -->
-<section class="promo">
-  <h2>Summer Sale</h2>
-  <p>Up to 30% off selected wigs</p>
-  <button class="btn dark">SHOP SALE</button>
-</section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-column">
+            <h3>Information</h3>
+            <ul>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Locations</a></li>
+                <li><a href="#">Investors</a></li>
+                <li><a href="#">Pricing</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Help Center</h3>
+            <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Terms and Condition</a></li>
+                <li><a href="#">Private Policies</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact Us</h3>
+            <p>hairbubbles87@gmail.com</p>
+            <p>+2347060858500</p>
+        </div>
+        <div class="footer-column">
+            <h3>Join Our Newsletter</h3>
+            <p>Get glow tips and exclusive offers straight to your inbox.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your Email">
+                <button type="submit">Go!</button>
+            </form>
+        </div>
+    </footer>
 
-<!-- 7. WHY US -->
-<section>
-  <h2>Why Choose Hair Bubbles</h2>
-  <div class="why-grid">
-    <div>✔ Premium Quality Hair</div>
-    <div>✔ Affordable Prices</div>
-    <div>✔ Fast & Secure Delivery</div>
-  </div>
-</section>
+    <!-- JavaScript -->
+    <script>
+        let cart = [];
 
-<!-- 8. BLOG -->
-<section>
-  <h2>Hair Tips & Blog</h2>
-  <div class="blog-grid">
-    <div class="blog-card">
-      <h3>How to Maintain Your Wig</h3>
-      <p>Simple steps to keep your wig flawless.</p>
-    </div>
-    <div class="blog-card">
-      <h3>Choosing the Right Hair</h3>
-      <p>Find the perfect style for your look.</p>
-    </div>
-  </div>
-</section>
+        function toggleCart() {
+            const cartModal = document.getElementById('cartModal');
+            cartModal.classList.toggle('open');
+        }
 
-<!-- 9. NEWSLETTER -->
-<section class="newsletter">
-  <h2>Join Our Newsletter</h2>
-  <p>Get updates & exclusive offers</p>
-  <input type="email" placeholder="Enter your email"><br><br>
-  <button class="btn">Subscribe</button>
-</section>
+        function addToCart(productName, price, imageUrl) {
+            cart.push({ productName, price, imageUrl });
+            updateCart();
+            alert(`${productName} added to cart!`);
+        }
 
-<!-- 10. FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div>
-      <h3>Hair Bubbles</h3>
-      <p>Enhancing natural beauty.</p>
-    </div>
-    <div>
-      <h4>Quick Links</h4>
-      <p>Shop</p>
-      <p>Blog</p>
-      <p>Contact</p>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <p>Email: info@hairbubbles.co.za</p>
-      <p>Phone: +27 000 0000</p>
-    </div>
-  </div>
-  <p style="text-align:center;margin-top:20px;">
-    © 2026 Hair Bubbles. All Rights Reserved.
-  </p>
-</footer>
+        function updateCart() {
+            const cartItemsElement = document.getElementById('cartItems');
+            const cartTotalElement = document.getElementById('cartTotal');
+            const cartCountElement = document.getElementById('cartCount');
 
+            cartItemsElement.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.productName}">
+                    <div style="flex: 1;">
+                        <h4>${item.productName}</h4>
+                        <p>$${item.price}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" style="background: #ff6b6b; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 5px; cursor: pointer;">Remove</button>
+                `;
+                cartItemsElement.appendChild(itemElement);
+            });
+
+            cartTotalElement.textContent = total;
+            cartCountElement.textContent = cart.length;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+    </script>
 </body>
 </html>
