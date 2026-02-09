@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hair Bubbles - Exquisite Wigs & Hair Solutions</title>
+    <title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #8B4513;
-            --secondary-color: #5C4033;
-            --accent-color: #D2B48C;
-            --light-color: #F5F5F5;
-            --dark-color: #333;
+            --primary-color: #8B4513; /* SaddleBrown */
+            --secondary-color: #5C4033; /* DarkBrown */
+            --accent-color: #D2B48C; /* Tan */
+            --light-color: #F5F5F5; /* LightGray */
+            --dark-color: #333; /* DarkGray */
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Poppins', sans-serif;
         }
@@ -31,26 +31,31 @@
             font-family: var(--font-heading);
         }
 
-        /* Header */
+        /* Promotional Banner */
         .promo-banner {
             background: var(--secondary-color);
             color: white;
             text-align: center;
-            padding: 0.5rem;
+            padding: 0.7rem;
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
+        /* Navigation */
         nav {
             background: white;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: var(--secondary-color);
         }
@@ -65,16 +70,27 @@
             text-decoration: none;
             color: var(--dark-color);
             font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
         }
 
         .nav-icons {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
+            align-items: center;
         }
 
         .nav-icons a {
             color: var(--dark-color);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-icons a:hover {
+            color: var(--primary-color);
         }
 
         /* Hero Section */
@@ -82,9 +98,11 @@
             display: flex;
             align-items: center;
             padding: 4rem 2rem;
-            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://picsum.photos/1920/800?random=1');
+            min-height: 70vh;
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+                        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
-            min-height: 600px;
+            background-position: center;
         }
 
         .hero-content {
@@ -151,23 +169,23 @@
 <body>
     <!-- Promotional Banner -->
     <div class="promo-banner">
-        Limited Time Offer! Get 20% Off All Purchases
+        Limited Time Offer! Get 20% Off All Hair Products
     </div>
 
     <!-- Navigation -->
     <nav>
         <div class="logo">Hair Bubbles</div>
         <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Shop</a></li>
-            <li><a href="#">Collection</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Sale</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="#" onclick="navigateTo('home')">Home</a></li>
+            <li><a href="#" onclick="navigateTo('shop')">Shop</a></li>
+            <li><a href="#" onclick="navigateTo('collection')">Collection</a></li>
+            <li><a href="#" onclick="navigateTo('blog')">Blog</a></li>
+            <li><a href="#" onclick="navigateTo('sale')">Sale</a></li>
+            <li><a href="#" onclick="navigateTo('contact')">Contact</a></li>
         </ul>
         <div class="nav-icons">
-            <a href="#">🔍</a>
-            <a href="#">🛒</a>
+            <a href="#" onclick="navigateTo('search')">🔍</a>
+            <a href="#" onclick="navigateTo('cart')">🛒</a>
         </div>
     </nav>
 
@@ -175,12 +193,22 @@
     <section class="hero">
         <div class="hero-content">
             <p>Discover Your Perfect Look</p>
-            <h1>Enhance Your Natural Beauty With Our Exquisite Wigs</h1>
-            <button class="cta-button">SHOP NOW</button>
+            <h1>Premium Hair Wigs & Extensions</h1>
+            <p>Enhance your natural beauty with our exquisite collection of high-quality hair wigs and extensions.</p>
+            <button class="cta-button" onclick="navigateTo('shop')">SHOP NOW</button>
         </div>
         <div class="hero-image">
-            <img src="https://picsum.photos/600/700?random=2" alt="Model with Exquisite Wig">
+            <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Model with Premium Hair Wig">
         </div>
     </section>
+
+    <!-- JavaScript for Navigation -->
+    <script>
+        function navigateTo(page) {
+            alert(`Navigating to ${page} page.`);
+            // In a real application, you would use:
+            // window.location.href = `/${page}`;
+        }
+    </script>
 </body>
 </html>
