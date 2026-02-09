@@ -1,399 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Hair Boutique SA | Premium Wigs & Bundles</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hair Boutique - Premium Wigs & Bundles</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        .hero {
+            background: #f9f9f9;
+            padding: 2rem;
+            text-align: center;
+        }
 
-<style>
-:root{
-    --primary:#7a3e1d;
-    --secondary:#2b1a12;
-    --accent:#d4af37;
-    --bg:#faf7f4;
-    --dark:#222;
-}
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
 
-*{
-    box-sizing:border-box;
-}
+        .hero-images {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
 
-body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:var(--bg);
-    color:var(--dark);
-}
+        .hero-item {
+            text-align: center;
+        }
 
-h1,h2,h3{
-    font-family:'Playfair Display',serif;
-}
+        .hero-item img {
+            width: 300px;
+            height: 250px;
+            object-fit: cover;
+        }
 
-/* NAV */
-nav{
-    background:var(--secondary);
-    color:#fff;
-    padding:1rem 2rem;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:1000;
-}
+        .hero-item button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
 
-.logo{
-    font-size:1.6rem;
-    letter-spacing:1px;
-}
+        .testimonials {
+            padding: 2rem;
+            text-align: center;
+            background: #fff;
+        }
 
-.cart-icon{
-    cursor:pointer;
-    position:relative;
-}
+        .testimonials h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
 
-.cart-count{
-    position:absolute;
-    top:-8px;
-    right:-10px;
-    background:var(--accent);
-    color:#000;
-    width:20px;
-    height:20px;
-    border-radius:50%;
-    font-size:.7rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
+        .testimonial-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
 
-/* HERO */
-.hero{
-    min-height:85vh;
-    background:
-        linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-        url("https://images.unsplash.com/photo-1595475038784-13c2f2f6cbd1");
-    background-size:cover;
-    background-position:center;
-    color:#fff;
-    text-align:center;
-    padding:5rem 2rem;
-}
+        .testimonial-card {
+            max-width: 300px;
+            text-align: center;
+        }
 
-.hero h1{
-    font-size:3.2rem;
-    margin-bottom:1rem;
-    animation:fadeUp 1.2s ease;
-}
+        .testimonial-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-.hero p{
-    max-width:700px;
-    margin:0 auto 3rem;
-    font-size:1.1rem;
-}
+        .product-showcase, .hair-care, .booking, .footer-banner {
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
 
-.hero-images{
-    display:flex;
-    justify-content:center;
-    gap:2rem;
-    flex-wrap:wrap;
-}
+        .product-showcase img, .hair-care img, .booking img, .footer-banner img {
+            width: 50%;
+            height: auto;
+        }
 
-.hero-item{
-    background:rgba(255,255,255,.1);
-    backdrop-filter:blur(8px);
-    padding:1.2rem;
-    border-radius:15px;
-    transition:.3s;
-}
+        .product-showcase div, .hair-care div, .booking div, .footer-banner div {
+            width: 50%;
+            padding: 2rem;
+        }
 
-.hero-item:hover{
-    transform:translateY(-8px);
-}
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: #fff;
+        }
 
-.hero-item img{
-    width:280px;
-    height:220px;
-    object-fit:cover;
-    border-radius:12px;
-}
+        .feature {
+            text-align: center;
+            max-width: 200px;
+        }
 
-button{
-    background:var(--accent);
-    border:none;
-    padding:.7rem 1.6rem;
-    margin-top:1rem;
-    font-weight:600;
-    cursor:pointer;
-    border-radius:30px;
-    transition:.3s;
-}
+        .feature img {
+            width: 50px;
+            height: 50px;
+        }
 
-button:hover{
-    background:#c19a2d;
-}
+        .best-sellers {
+            padding: 2rem;
+            text-align: center;
+        }
 
-/* TRUST BAR */
-.trust{
-    display:flex;
-    justify-content:center;
-    gap:3rem;
-    padding:2.5rem 1rem;
-    background:#fff;
-    text-align:center;
-}
+        .sellers-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
 
-.trust div{
-    max-width:200px;
-}
+        .seller-item {
+            text-align: center;
+        }
 
-/* TESTIMONIALS */
-.testimonials{
-    padding:4rem 2rem;
-}
+        .seller-item img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+        }
 
-.testimonials h2{
-    text-align:center;
-    margin-bottom:3rem;
-}
+        button {
+            background: #8B4513;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
 
-.testimonial-cards{
-    display:flex;
-    justify-content:center;
-    gap:2rem;
-    flex-wrap:wrap;
-}
-
-.testimonial-card{
-    background:#fff;
-    padding:1.8rem;
-    max-width:330px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-.testimonial-card img{
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    object-fit:cover;
-    margin-bottom:1rem;
-}
-
-/* SHOWCASE */
-.product-showcase{
-    display:flex;
-    gap:3rem;
-    padding:4rem 2rem;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.product-showcase img{
-    width:100%;
-    max-width:520px;
-    border-radius:20px;
-    box-shadow:0 12px 30px rgba(0,0,0,.15);
-}
-
-.showcase-content{
-    max-width:500px;
-}
-
-/* CART */
-.cart-modal{
-    position:fixed;
-    right:-420px;
-    top:0;
-    width:380px;
-    height:100%;
-    background:#fff;
-    box-shadow:-10px 0 25px rgba(0,0,0,.15);
-    padding:1.5rem;
-    transition:.4s;
-    z-index:2000;
-}
-
-.cart-modal.open{
-    right:0;
-}
-
-.cart-item{
-    display:flex;
-    gap:1rem;
-    margin-bottom:1rem;
-}
-
-/* FOOTER */
-footer{
-    background:var(--secondary);
-    color:#fff;
-    padding:3rem 2rem 1.5rem;
-}
-
-.footer-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:2rem;
-}
-
-footer a{
-    color:#fff;
-    text-decoration:none;
-}
-
-footer a:hover{
-    color:var(--accent);
-}
-
-.newsletter-form{
-    display:flex;
-    margin-top:1rem;
-}
-
-.newsletter-form input{
-    flex:1;
-    padding:.6rem;
-    border:none;
-}
-
-.newsletter-form button{
-    border-radius:0;
-}
-
-/* ANIM */
-@keyframes fadeUp{
-    from{opacity:0;transform:translateY(30px)}
-    to{opacity:1;transform:translateY(0)}
-}
-
-/* MOBILE */
-@media(max-width:768px){
-    .hero h1{font-size:2.4rem}
-    .trust{flex-direction:column}
-}
-</style>
+        input, select {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
 </head>
-
 <body>
-
-<nav>
-    <div class="logo">Hair Boutique SA</div>
-    <div class="cart-icon" onclick="toggleCart()">🛒 <span id="cartCount" class="cart-count">0</span></div>
-</nav>
-
-<section class="hero">
-    <h1>Luxury Hair. Confident You.</h1>
-    <p>Premium wigs and bundles crafted for bold, beautiful women across South Africa. Delivered nationwide.</p>
-
-    <div class="hero-images">
-        <div class="hero-item">
-            <img src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5">
-            <button onclick="addToCart('Luxury Wigs',1800)">Shop Wigs</button>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>TOP COLLECTION</h1>
+            <div class="hero-images">
+                <div class="hero-item">
+                    <img src="https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Wigs" alt="Wigs">
+                    <button>SHOP NOW</button>
+                </div>
+                <div class="hero-item">
+                    <img src="https://via.placeholder.com/400x300/000000/FFFFFF?text=Bundles" alt="Bundles">
+                    <button>SHOP NOW</button>
+                </div>
+            </div>
         </div>
-        <div class="hero-item">
-            <img src="https://images.unsplash.com/photo-1595475038784-13c2f2f6cbd1">
-            <button onclick="addToCart('Premium Bundles',2400)">Shop Bundles</button>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>DON'T JUST TAKE OUR WORD FOR IT...</h2>
+        <div class="testimonial-cards">
+            <div class="testimonial-card">
+                <img src="https://via.placeholder.com/150/8B4513/FFFFFF?text=Kia" alt="Kia">
+                <p>I've Purchased Wigs From Many Different Brands Over The Years, But This One Truly Stands Out. Hair Bubbles Is The Best.</p>
+                <h4>Kia</h4>
+                <p>@Thebubbleskia</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://via.placeholder.com/150/8B4513/FFFFFF?text=Gloria" alt="Gloria">
+                <p>From The Fast Delivery To The Premium Packaging, Everything About This Brand Feels Professional And Reliable.</p>
+                <h4>Gloria</h4>
+                <p>@Thehairlovereia</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="trust">
-    <div>🇿🇦 Proudly South African</div>
-    <div>🚚 Nationwide Delivery</div>
-    <div>💎 100% Premium Quality</div>
-</section>
+    <!-- Product Showcase -->
+    <section class="product-showcase">
+        <div class="showcase-content">
+            <h2>Enhance Your Natural Beauty With Our Exquisite Wigs</h2>
+            <button>SHOP NOW</button>
+        </div>
+        <img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=Wig+Model" alt="Wig Model">
+    </section>
 
-<section class="testimonials">
-<h2>What Our Clients Say</h2>
-<div class="testimonial-cards">
-    <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/women/65.jpg">
-        <p>Best quality hair I’ve bought in SA. Worth every rand!</p>
-        <strong>Thando – Johannesburg</strong>
-    </div>
-    <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg">
-        <p>Soft, full, and true to length. Delivery was fast.</p>
-        <strong>Lerato – Pretoria</strong>
-    </div>
-</div>
-</section>
+    <!-- Hair Care -->
+    <section class="hair-care">
+        <div class="hair-care-content">
+            <h2>Hair Care</h2>
+            <p>We Provide High-Quality Hair Wigs, Professional Hair Tools, And Carefully Formulated Hair And Wig Treatments.</p>
+            <button>LEARN MORE</button>
+        </div>
+        <img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=Hair+Care" alt="Hair Care">
+    </section>
 
-<section class="product-showcase">
-<div class="showcase-content">
-    <h2>Designed to Elevate Your Everyday Look</h2>
-    <p>Our hair is sourced ethically and styled to perfection — giving you confidence from boardroom to weekend.</p>
-    <button onclick="addToCart('Signature Wig',2600)">Buy Now</button>
-</div>
-<img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f">
-</section>
-
-<div id="cartModal" class="cart-modal">
-<h2>Your Cart</h2>
-<div id="cartItems"></div>
-<p><strong>Total: R<span id="cartTotal">0</span></strong></p>
-</div>
-
-<footer>
-<div class="footer-grid">
-    <div>
-        <h3>Company</h3>
-        <a href="#">About Us</a><br>
-        <a href="#">Our Stores</a>
-    </div>
-    <div>
-        <h3>Support</h3>
-        <a href="#">FAQ</a><br>
-        <a href="#">Returns</a>
-    </div>
-    <div>
-        <h3>Contact</h3>
-        <p>hairboutiquesa@gmail.com</p>
-        <p>+27 71 234 5678</p>
-    </div>
-    <div>
-        <h3>Newsletter</h3>
-        <form class="newsletter-form">
-            <input type="email" placeholder="Email address">
-            <button>Join</button>
+    <!-- Booking Form -->
+    <section class="booking">
+        <h2>BOOK CONSULTATION</h2>
+        <form>
+            <input type="text" placeholder="Name">
+            <input type="tel" placeholder="Phone Number">
+            <select>
+                <option>Select Treatment</option>
+                <option>Hair Treatment</option>
+                <option>Wig Styling</option>
+            </select>
+            <input type="date" placeholder="Date">
+            <label><input type="checkbox"> I want to receive reminder and update concerning my booking</label>
+            <button type="submit">Confirm</button>
         </form>
-    </div>
-</div>
-</footer>
+        <img src="https://via.placeholder.com/400x500/8B4513/FFFFFF?text=Consultation" alt="Consultation">
+    </section>
 
-<script>
-let cart=[];
+    <!-- Features -->
+    <section class="features">
+        <div class="feature">
+            <img src="https://via.placeholder.com/50/8B4513/FFFFFF?text=OK" alt="Original Product">
+            <h3>Original Product</h3>
+            <p>We Provide Your Money Worth With Nothing But Original And With Full Guarantee.</p>
+        </div>
+        <div class="feature">
+            <img src="https://via.placeholder.com/50/8B4513/FFFFFF?text=SG" alt="Satisfaction Guaranteed">
+            <h3>Satisfaction Guaranteed</h3>
+            <p>Designed For Comfort, Quality, And Confidence—Because You Deserve The Best.</p>
+        </div>
+        <div class="feature">
+            <img src="https://via.placeholder.com/50/8B4513/FFFFFF?text=NA" alt="New Arrival Daily">
+            <h3>New Arrival Daily</h3>
+            <p>Fresh Wigs, Hair Tools, And Treatments Added Daily For Your Perfect Look.</p>
+        </div>
+        <div class="feature">
+            <img src="https://via.placeholder.com/50/8B4513/FFFFFF?text=SS" alt="Standard Shipping">
+            <h3>Standard Shipping</h3>
+            <p>Reliable Delivery Straight To Your Door, Every Time.</p>
+        </div>
+    </section>
 
-function toggleCart(){
-    document.getElementById("cartModal").classList.toggle("open");
-}
+    <!-- Best Sellers -->
+    <section class="best-sellers">
+        <h2>BEST SELLERS</h2>
+        <div class="sellers-grid">
+            <div class="seller-item">
+                <img src="https://via.placeholder.com/300/8B4513/FFFFFF?text=Deep+Wave+Curly+Wig" alt="Deep Wave Curly Wig">
+                <h3>Deep Wave Curly Wig</h3>
+                <p>$150</p>
+            </div>
+            <div class="seller-item">
+                <img src="https://via.placeholder.com/300/8B4513/FFFFFF?text=Vietnamese+Bone+Straight" alt="Vietnamese Bone Straight">
+                <h3>Vietnamese Bone Straight</h3>
+                <p>$330</p>
+            </div>
+            <div class="seller-item">
+                <img src="https://via.placeholder.com/300/8B4513/FFFFFF?text=Indonesian+Wavy" alt="Indonesian Wavy">
+                <h3>Indonesian Wavy</h3>
+                <p>$270</p>
+            </div>
+        </div>
+    </section>
 
-function addToCart(name,price){
-    cart.push({name,price});
-    updateCart();
-}
-
-function updateCart(){
-    const items=document.getElementById("cartItems");
-    const total=document.getElementById("cartTotal");
-    const count=document.getElementById("cartCount");
-    items.innerHTML="";
-    let sum=0;
-
-    cart.forEach(i=>{
-        sum+=i.price;
-        items.innerHTML+=`<div class="cart-item"><p>${i.name}</p><strong>R${i.price}</strong></div>`;
-    });
-
-    total.textContent=sum;
-    count.textContent=cart.length;
-}
-</script>
-
+    <!-- Footer Banner -->
+    <section class="footer-banner">
+        <h2>UNPROCESSED, UNMATCHED.</h2>
+        <h1>PURE HAIR</h1>
+        <button>SHOP NOW</button>
+        <img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=Pure+Hair" alt="Pure Hair">
+    </section>
 </body>
 </html>
