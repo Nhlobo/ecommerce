@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hair Bubbles SA - Premium Hair Weaves & Extensions</title>
+<title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +27,9 @@ body {
     color: var(--dark);
 }
 
-h1, h2, h3 { margin: 0; }
+h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 1px; color: var(--secondary); }
 
+/* Banner */
 .banner {
     background: var(--secondary);
     color: white;
@@ -37,7 +38,7 @@ h1, h2, h3 { margin: 0; }
     font-size: 0.9rem;
 }
 
-/* Navigation */
+/* Nav */
 nav {
     background: white;
     display: flex;
@@ -51,7 +52,7 @@ nav {
 }
 
 .logo img {
-    width: 160px;  /* Desktop default */
+    width: 160px; /* desktop size */
     max-width: 100%;
     height: auto;
 }
@@ -104,11 +105,7 @@ nav {
 .hero-content { max-width: 520px; }
 
 .hero h1 {
-    font-family: 'Cormorant Garamond', serif;
     font-size: 3rem;
-    font-style: italic;
-    letter-spacing: 1px;
-    color: var(--secondary);
     margin-bottom: 1rem;
 }
 
@@ -128,7 +125,6 @@ nav {
 
 .cta:hover { background: var(--primary); }
 
-/* Trust badges */
 .trust {
     display: flex;
     gap: 1rem;
@@ -161,7 +157,7 @@ nav {
 
 <body>
 <div class="banner">
-    Secure SA Payments • Fast Nationwide Delivery • Professional Hair & Makeup
+    Limited Time Offer! Get 20% Off All Hair Products
 </div>
 
 <nav>
@@ -172,34 +168,34 @@ nav {
     <ul class="nav-links">
         <li><a href="#" data-page="home">Home</a></li>
         <li><a href="#" data-page="shop">Shop</a></li>
-        <li><a href="#" data-page="checkout">Checkout</a></li>
-        <li><a href="#" data-page="services">Services</a></li>
+        <li><a href="#" data-page="collection">Collection</a></li>
+        <li><a href="#" data-page="sale">Sale</a></li>
+        <li><a href="#" data-page="contact">Contact</a></li>
     </ul>
 
     <div class="nav-actions" id="authArea">
-        <!-- Dynamic login/logout -->
+        <!-- Dynamic login/logout buttons -->
     </div>
 </nav>
 
 <section class="hero">
     <div class="hero-content">
-        <p>Your Luxury Hair Destination in South Africa</p>
-        <h1>Premium Hair Weaves & Extensions</h1>
+        <p>Discover Your Perfect Look</p>
+        <h1>Premium Hair Wigs & Extensions</h1>
         <p>
-            We provide high-quality hair, professional installation, and beauty services.
-            Enhance your style with our exclusive collection of wigs, weaves, and expert makeup services.
+            Enhance your natural beauty with our exquisite collection of high-quality hair wigs and extensions.
         </p>
 
-        <button class="cta" data-page="shop">Shop Now</button>
+        <button class="cta" data-page="shop">SHOP NOW</button>
 
         <div class="trust">
             <div>Secure Checkout</div>
-            <div>Fast Nationwide Delivery</div>
-            <div>Expert Hair & Makeup</div>
+            <div>Fast Delivery</div>
+            <div>Quality Guarantee</div>
         </div>
     </div>
 
-    <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71" alt="Premium Hair Wig">
+    <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71" alt="Model with Premium Hair Wig">
 </section>
 
 <script>
