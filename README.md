@@ -1,6 +1,6 @@
 # Premium Hair Wigs & Extensions E-commerce Platform
 
-A complete, production-ready frontend for a premium hair wigs and extensions e-commerce platform. Built with vanilla JavaScript, CSS, and HTML for optimal performance and simplicity.
+A complete, production-ready **full-stack** e-commerce platform for a premium hair wigs and extensions business. Features a customer-facing storefront and a **secure, production-grade Admin Dashboard** with backend server, database, and comprehensive business management tools.
 
 ## 🚀 About Premium Hair Wigs & Extensions
 
@@ -25,7 +25,7 @@ A complete, production-ready frontend for a premium hair wigs and extensions e-c
 
 ## ✨ Features
 
-### Customer Features
+### Customer-Facing Storefront
 - 🛍️ **Product Catalog** - Browse wigs, extensions, and accessories
 - 🔍 **Search & Filter** - Find products by category and search terms
 - 🛒 **Shopping Cart** - Add, update, and remove items
@@ -35,6 +35,36 @@ A complete, production-ready frontend for a premium hair wigs and extensions e-c
 - 👤 **User Accounts** - Register, login, and manage your profile
 - 📱 **Responsive Design** - Works seamlessly on all devices
 - 🔔 **Notifications** - Real-time feedback for all actions
+
+### 🔐 **ADMIN DASHBOARD** (Production-Grade)
+
+#### Security & Authentication
+- 🔒 **JWT Token Authentication** - Secure token-based auth
+- 🔑 **Password Hashing** - bcrypt with 12 rounds
+- 🛡️ **Brute-Force Protection** - Rate limiting & login attempt tracking
+- 📊 **Session Management** - Secure session handling with expiration
+- 🚨 **Security Monitoring** - Real-time security event tracking
+- 📝 **Activity Logging** - Complete audit trail of all admin actions
+- 🔐 **Role-Based Access Control** - Admin role management
+
+#### Business Management Panels (10 Panels)
+1. **📊 Overview/Dashboard** - Real-time metrics, sales, alerts, quick actions
+2. **📦 Orders Management** - View, filter, update orders, tracking numbers
+3. **💳 Payments** - PayFast integration, payment tracking, refund processing
+4. **👥 Customers** - Customer profiles, order history, POPIA compliant
+5. **📦 Products & Inventory** - Add/edit products, stock management, VAT pricing
+6. **🎟️ Discounts & Promotions** - Create discount codes, manage campaigns
+7. **↩️ Returns & Refunds** - CPA compliant return workflows, inspection tracking
+8. **📈 Reports & Analytics** - Sales reports, product performance, revenue trends
+9. **📋 Compliance & Legal** - VAT records, POPIA controls, policy management
+10. **🔐 Security & Logs** - Activity logs, security events, audit trails
+
+#### Compliance & Legal
+- 💰 **VAT Record-Keeping** - Automatic 15% VAT calculation & archiving
+- 🛡️ **POPIA Compliance** - Data protection, access logging, privacy controls
+- ⚖️ **Consumer Protection Act** - Return workflows, refund processing
+- 📄 **Policy Management** - Terms, Privacy, Returns policy documents
+- 📊 **Audit Trails** - Complete activity and data access logging
 
 ### Business Features
 - 💰 **Pricing with VAT** - Automatic 15% VAT calculation
@@ -48,24 +78,54 @@ A complete, production-ready frontend for a premium hair wigs and extensions e-c
 
 ```
 ecommerce/
-├── index.html              # Main HTML file with all pages and modals
-├── styles.css              # Complete stylesheet with responsive design
+├── index.html                     # Customer-facing storefront
+├── styles.css                     # Storefront styles
 ├── js/
-│   ├── config.js          # Configuration (API endpoints, business info)
-│   ├── api.js             # API service layer
-│   └── app.js             # Main application logic
-├── README.md              # Project documentation (this file)
-└── .gitignore             # Git ignore rules
+│   ├── config.js                  # Configuration (API endpoints, business info)
+│   ├── api.js                     # API service layer
+│   └── app.js                     # Main application logic
+│
+├── admin/                         # 🔐 ADMIN DASHBOARD
+│   ├── login.html                 # Secure admin login
+│   ├── index.html                 # Admin dashboard (10 panels)
+│   ├── css/
+│   │   └── admin.css             # Admin dashboard styles
+│   └── js/
+│       ├── login.js              # Login authentication
+│       └── admin.js              # Dashboard functionality
+│
+├── server/                        # 🔧 BACKEND SERVER
+│   ├── server.js                  # Express server
+│   ├── controllers/
+│   │   └── authController.js     # Authentication logic
+│   ├── db/
+│   │   ├── connection.js         # PostgreSQL connection
+│   │   ├── init.js               # Database initialization
+│   │   └── schema.sql            # Complete database schema
+│   ├── middleware/
+│   │   ├── auth.js               # JWT authentication
+│   │   ├── rateLimiter.js        # Rate limiting & brute-force protection
+│   │   ├── logger.js             # Activity & data access logging
+│   │   └── validator.js          # Input validation & sanitization
+│   └── routes/
+│       └── adminRoutes.js        # All admin API endpoints
+│
+├── .env.example                   # Environment variables template
+├── package.json                   # Node.js dependencies
+├── README.md                      # This file
+├── ADMIN_SETUP.md                 # 📖 Admin Dashboard Setup Guide
+└── .gitignore                     # Git ignore rules
 ```
 
 ## 🛠️ Setup Instructions
 
-### Prerequisites
+### For Customer-Facing Storefront
+
+#### Prerequisites
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 - Local web server (optional, for testing)
-- Text editor (VS Code, Sublime Text, etc.)
 
-### Installation
+#### Installation
 
 1. **Clone the repository**
    ```bash
@@ -90,6 +150,53 @@ ecommerce/
 3. **Access the application**
    - Direct file: `file:///path/to/ecommerce/index.html`
    - Local server: `http://localhost:8000`
+
+---
+
+### 🔐 For Admin Dashboard (Production Setup)
+
+#### Prerequisites
+- Node.js (v14 or higher)
+- PostgreSQL (v12 or higher)
+- npm or yarn
+
+#### Quick Start
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your database credentials and secrets
+   ```
+
+3. **Initialize database**
+   ```bash
+   npm run init-db
+   ```
+
+4. **Start the server**
+   ```bash
+   # Development
+   npm run dev
+   
+   # Production
+   npm start
+   ```
+
+5. **Access admin dashboard**
+   ```
+   URL: http://localhost:3000/admin
+   Email: admin@premiumhairsa.co.za
+   Password: ChangeThisPassword123!
+   ```
+
+#### 📖 **Full Admin Setup Guide**
+For complete setup instructions, security configuration, and deployment:
+**See [ADMIN_SETUP.md](./ADMIN_SETUP.md)**
 
 ## ⚙️ Configuration
 
@@ -161,6 +268,53 @@ Change in the `<head>` section of `index.html`:
 <link href="https://fonts.googleapis.com/css2?family=Your+Font&display=swap" rel="stylesheet">
 ```
 
+## 🛡️ Security & Compliance
+
+### Admin Dashboard Security Features
+
+#### Authentication & Authorization
+- ✅ JWT token-based authentication
+- ✅ bcrypt password hashing (12 rounds)
+- ✅ Secure session management
+- ✅ Role-based access control (RBAC)
+
+#### Protection Mechanisms
+- ✅ Rate limiting (100 req/15 min)
+- ✅ Login rate limiting (5 attempts/15 min)
+- ✅ Brute-force protection
+- ✅ Failed login attempt tracking
+- ✅ Account lockout after excessive failures
+- ✅ Helmet.js security headers
+- ✅ CORS configuration
+- ✅ Input validation & sanitization
+- ✅ SQL injection prevention
+
+#### Monitoring & Logging
+- ✅ Complete activity audit trails
+- ✅ Security event tracking
+- ✅ IP address & user agent logging
+- ✅ Data access logging (POPIA compliance)
+
+### POPIA Compliance
+- ✅ User data handled securely
+- ✅ Data access logging and monitoring
+- ✅ Customer privacy controls
+- ✅ Clear privacy policy
+- ✅ User consent for data collection
+- ✅ Audit trails for data access
+
+### Consumer Protection Act (CPA)
+- ✅ 7-day return policy support
+- ✅ Return request workflows
+- ✅ Refund processing
+- ✅ Inspection tracking
+
+### VAT Compliance
+- ✅ Automatic 15% VAT calculation
+- ✅ VAT-inclusive pricing
+- ✅ VAT record archiving
+- ✅ Invoice generation support
+
 ## 📱 Browser Support
 
 - ✅ Chrome (latest)
@@ -223,6 +377,48 @@ vercel
 3. **New Product Category**
    - Update filter buttons in `index.html`
    - Add filter logic in `filterProducts()` function
+
+## 🛡️ Security & Compliance
+
+### Admin Dashboard Security Features
+
+#### Authentication & Authorization
+- ✅ JWT token-based authentication
+- ✅ bcrypt password hashing (12 rounds)
+- ✅ Secure session management
+- ✅ Role-based access control (RBAC)
+
+#### Protection Mechanisms
+- ✅ Rate limiting (100 req/15 min)
+- ✅ Login rate limiting (5 attempts/15 min)
+- ✅ Brute-force protection
+- ✅ Failed login attempt tracking
+- ✅ Account lockout after excessive failures
+- ✅ Helmet.js security headers
+- ✅ CORS configuration
+- ✅ Input validation & sanitization
+- ✅ SQL injection prevention
+
+#### Monitoring & Logging
+- ✅ Complete activity audit trails
+- ✅ Security event tracking
+- ✅ IP address & user agent logging
+- ✅ Data access logging (POPIA)
+
+### POPIA Compliance
+- User data is handled securely
+- Data access is logged and monitored
+- Customer privacy controls
+- Clear privacy policy
+- User consent for data collection
+- Audit trails for data access
+
+### Security Best Practices
+- Input validation on all forms
+- Secure payment gateway (PayFast)
+- HTTPS recommended for production
+- XSS protection through proper escaping
+- Regular security audits recommended
 
 ## 🛡️ Security & Compliance
 
