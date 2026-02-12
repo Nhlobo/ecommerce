@@ -1,256 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary-color: #8B4513;
-            --secondary-color: #5C4033;
-            --accent-color: #D2B48C;
-            --light-color: #F5F5F5;
-            --dark-color: #333;
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Poppins', sans-serif;
-        }
+<style>
+:root {
+    --primary: #8B4513;
+    --secondary: #5C4033;
+    --accent: #D2B48C;
+    --light: #F5F5F5;
+    --dark: #333;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+* { box-sizing: border-box; }
 
-        body {
-            margin: 0;
-            font-family: var(--font-body);
-            background-color: var(--light-color);
-            color: var(--dark-color);
-        }
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+}
 
-        h1, h2, h3 {
-            font-family: var(--font-heading);
-        }
+h1 { font-family: 'Playfair Display', serif; }
 
-        /* Promo Banner */
-        .promo-banner {
-            background: var(--secondary-color);
-            color: white;
-            text-align: center;
-            padding: 0.6rem;
-            font-size: 0.9rem;
-        }
+/* Banner */
+.banner {
+    background: var(--secondary);
+    color: white;
+    text-align: center;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+}
 
-        /* Navigation */
-        nav {
-            background: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+/* Nav */
+nav {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+}
 
-        .logo {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
+.logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--secondary);
+}
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            padding: 0;
-            margin: 0;
-        }
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+}
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 500;
-        }
+.nav-links a {
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 500;
+}
 
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
+.nav-links a:hover { color: var(--primary); }
 
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
 
-        .nav-actions button {
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
+.btn {
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
 
-        .login-btn {
-            background: var(--secondary-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-        }
+.login { background: var(--secondary); color: white; }
+.login:hover { background: var(--primary); }
 
-        .login-btn:hover {
-            background: var(--primary-color);
-        }
+.logout { background: transparent; border: 1px solid var(--secondary); }
 
-        /* Hero */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4rem 2rem;
-            min-height: 75vh;
-            background:
-                linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
-                url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
-            background-size: cover;
-            background-position: center;
-        }
+/* Hero */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 2rem;
+    min-height: 75vh;
+    background:
+        linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
+        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
+    background-size: cover;
+}
 
-        .hero-content {
-            max-width: 520px;
-        }
+.hero-content { max-width: 520px; }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin: 0.5rem 0;
-            color: var(--secondary-color);
-        }
+.hero h1 {
+    font-size: 3rem;
+    color: var(--secondary);
+    margin: 0.5rem 0;
+}
 
-        .hero p {
-            font-size: 1.05rem;
-            margin-bottom: 1.5rem;
-        }
+.cta {
+    background: var(--secondary);
+    color: white;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-        .cta-button {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.9rem 1.6rem;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+.cta:hover { background: var(--primary); }
 
-        .cta-button:hover {
-            background: var(--primary-color);
-        }
+/* Trust Badges */
+.trust {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
 
-        .trust-badges {
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #555;
-        }
+.trust div {
+    background: white;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
 
-        .trust-badges span {
-            display: inline-block;
-            margin-right: 1rem;
-        }
+/* Image */
+.hero img {
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
 
-        .hero-image img {
-            max-width: 420px;
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-        }
-    </style>
+@media (max-width: 768px) {
+    .hero { flex-direction: column; text-align: center; }
+    .nav-links { display: none; }
+}
+</style>
 </head>
 
 <body>
 
-    <div class="promo-banner">
-        Limited Time Offer — 20% Off Selected Items
+<div class="banner">
+    Secure Payments • Premium Quality • Nationwide Delivery
+</div>
+
+<nav>
+    <div class="logo">Hair Bubbles</div>
+
+    <ul class="nav-links">
+        <li><a href="#" data-page="home">Home</a></li>
+        <li><a href="#" data-page="shop">Shop</a></li>
+        <li><a href="#" data-page="checkout">Checkout</a></li>
+    </ul>
+
+    <div class="nav-actions" id="authArea">
+        <!-- Dynamic -->
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <p>Discover Your Perfect Look</p>
+        <h1>Premium Hair Wigs & Extensions</h1>
+        <p>Luxury styles designed for confidence and comfort.</p>
+
+        <button class="cta" data-page="shop">Shop Now</button>
+
+        <div class="trust">
+            <div>Secure Checkout</div>
+            <div>Fast Delivery</div>
+            <div>Quality Guarantee</div>
+        </div>
     </div>
 
-    <nav role="navigation">
-        <div class="logo">Hair Bubbles</div>
+    <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71" 
+         alt="Premium Hair Wig">
+</section>
 
-        <ul class="nav-links">
-            <li><a href="#" data-page="home">Home</a></li>
-            <li><a href="#" data-page="shop">Shop</a></li>
-            <li><a href="#" data-page="collection">Collection</a></li>
-            <li><a href="#" data-page="sale">Sale</a></li>
-            <li><a href="#" data-page="contact">Contact</a></li>
-        </ul>
+<script>
+let isLoggedIn = false;
 
-        <div class="nav-actions">
-            <button aria-label="Search">🔍</button>
-            <button aria-label="Cart">🛒</button>
-            <button class="login-btn" data-page="login">Login</button>
-        </div>
-    </nav>
+const authArea = document.getElementById("authArea");
 
-    <section class="hero">
-        <div class="hero-content">
-            <p>Discover Your Perfect Look</p>
-            <h1>Premium Hair Wigs & Extensions</h1>
-            <p>
-                Enhance your beauty with our high-quality wigs and extensions.
-                Designed for comfort, style, and confidence.
-            </p>
+function renderAuth() {
+    authArea.innerHTML = isLoggedIn
+        ? `<button class="btn logout" id="logoutBtn">Logout</button>`
+        : `<button class="btn login" id="loginBtn">Login</button>`;
+}
 
-            <button class="cta-button" data-page="shop">
-                Shop Now
-            </button>
+document.addEventListener("click", (e) => {
 
-            <div class="trust-badges">
-                <span>✔ Secure Checkout</span>
-                <span>✔ Fast Delivery</span>
-                <span>✔ Quality Guarantee</span>
-            </div>
-        </div>
+    const pageLink = e.target.closest("[data-page]");
+    if (pageLink) {
+        const page = pageLink.dataset.page;
 
-        <div class="hero-image">
-            <img 
-                src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71"
-                alt="Model showcasing premium hair wig"
-            >
-        </div>
-    </section>
+        if (page === "checkout" && !isLoggedIn) {
+            alert("Please log in to proceed to checkout.");
+            return;
+        }
 
-    <script>
-        document.addEventListener("click", (e) => {
-            const target = e.target.closest("[data-page]");
-            if (!target) return;
+        alert("Navigate to: " + page);
+    }
 
-            const page = target.dataset.page;
+    if (e.target.id === "loginBtn") {
+        isLoggedIn = true;
+        renderAuth();
+    }
 
-            // Example navigation logic
-            console.log("Navigate to:", page);
+    if (e.target.id === "logoutBtn") {
+        isLoggedIn = false;
+        renderAuth();
+    }
+});
 
-            // Real usage:
-            // window.location.href = `/${page}`;
-        });
-    </script>
+renderAuth();
+</script>
 
 </body>
 </html>
