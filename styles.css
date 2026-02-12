@@ -158,6 +158,7 @@ nav {
     font-size: 1.5rem;
     color: var(--primary);
     font-family: var(--font-heading);
+    display: none;
 }
 
 .nav-links {

@@ -135,7 +135,7 @@ async function init() {
         // Check if user is logged in
         if (localStorage.getItem('authToken')) {
             console.log('User token found, loading user data...');
-            // await loadUserData(); // Commented out as this function doesn't exist in the code
+            // User data loading handled by renderAuth
         }
         
         // Load products (with fallback)
@@ -544,7 +544,7 @@ function createProductCard(product, showDiscount = false) {
             <h3 onclick="viewProduct(${product.id})">${product.name}</h3>
             <p class="description">${product.description}</p>
             <div class="price">
-                ${originalPrice ? `<span style="text-decoration: line-through; color: #999; font-size: 0.9rem; margin-right: 0.5rem;">R${originalPrice.toFixed(2)}</span>` : ''}
+                ${originalPrice ? `<span class="original-price">R${originalPrice.toFixed(2)}</span>` : ''}
                 R${parseFloat(price).toFixed(2)}
             </div>
             <button onclick="addToCart(${product.id})">Add to Cart</button>
@@ -1246,19 +1246,22 @@ function getFallbackProducts() {
     ];
 }
 
-// ========== Debug Helper - Remove in production ==========
-window.debugApp = function() {
-    console.log('=== APP DEBUG INFO ===');
-    console.log('Products loaded:', state.products.length);
-    console.log('Cart items:', state.cart.length);
-    console.log('User logged in:', !!state.user);
-    console.log('Current page:', state.currentPage);
-    console.log('Products:', state.products);
-    console.log('=====================');
-};
-
-// Test products loading
-console.log('Products available on page load:', state.products.length);
+// ========== Debug Helper (Development Only) ==========
+// Note: Remove or disable in production
+if (typeof window !== 'undefined' && window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    window.debugApp = function() {
+        console.log('=== APP DEBUG INFO ===');
+        console.log('Products loaded:', state.products.length);
+        console.log('Cart items:', state.cart.length);
+        console.log('User logged in:', !!state.user);
+        console.log('Current page:', state.currentPage);
+        console.log('Products:', state.products);
+        console.log('=====================');
+    };
+    
+    // Log initial state in development
+    console.log('Products available on page load:', state.products.length);
+}
 
 // ========== Initialize App on Page Load ==========
 if (document.readyState === 'loading') {
