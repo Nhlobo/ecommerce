@@ -32,54 +32,36 @@
         🎉 Free Shipping on Orders Above R1,500 | 7-Day Return Policy | POPIA Compliant
     </div>
 
+    <!-- Navigation -->
     <nav>
-        <div class="logo" onclick="navigateTo('home')">Premium Hair SA</div>
-        
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
-            <li><a href="#" onclick="navigateTo('shop'); return false;">Shop</a></li>
-            <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
-            <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
-            <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
-        </ul>
-        
-        <div class="search-bar">
-            <input type="text" id="searchBar" placeholder="Search products...">
+        <!-- Logo (User will upload) -->
+        <div class="logo">
+            <img 
+                src="assets/images/logo.png" 
+                alt="Premium Hair Wigs & Extensions" 
+                class="logo-image"
+                onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%2260%22%3E%3Ctext x=%2210%22 y=%2240%22 font-family=%22Cormorant Garamond, serif%22 font-size=%2224%22 fill=%22%238B4513%22 font-weight=%22bold%22%3EPremium Hair SA%3C/text%3E%3C/svg%3E';">
         </div>
-        
-        <div class="nav-icons">
-            <div class="auth-buttons" id="authButtons">
-                <button class="btn btn-outline" onclick="openModal('loginModal')">Login</button>
-                <button class="btn btn-primary" onclick="openModal('registerModal')">Sign Up</button>
-            </div>
-            
-            <div class="user-info" id="userInfo">
-                <span id="userName">User</span>
-                <div class="user-menu">
-                    <i class="fas fa-user icon-btn"></i>
-                    <div class="user-dropdown">
-                        <a href="#" onclick="navigateTo('orders'); return false;">My Orders</a>
-                        <a href="#" onclick="navigateTo('wishlist'); return false;">Wishlist</a>
-                        <button onclick="handleLogout()">Logout</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="icon-btn" onclick="navigateTo('wishlist')">
-                <i class="fas fa-heart"></i>
-                <span class="badge" id="wishlistBadge">0</span>
-            </div>
-            
-            <div class="icon-btn" onclick="navigateTo('cart')">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="badge" id="cartBadge">0</span>
-            </div>
-        </div>
-        
+
+        <!-- Mobile Menu Toggle -->
         <div class="hamburger" id="hamburger">
             <span></span>
             <span></span>
             <span></span>
+        </div>
+
+        <!-- Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
+            <li><a href="#" onclick="navigateTo('shop'); return false;">Shop</a></li>
+            <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
+            <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+        </ul>
+
+        <!-- Auth Area (Login/Logout) -->
+        <div class="nav-actions">
+            <div id="authArea"></div>
         </div>
     </nav>
 

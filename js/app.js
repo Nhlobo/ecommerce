@@ -157,16 +157,10 @@ function init() {
 
 // ========== Event Listeners Setup ==========
 function setupEventListeners() {
-    // Search functionality with debounce
-    const searchBar = document.getElementById('searchBar');
-    if (searchBar) {
-        let searchTimeout;
-        searchBar.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                searchProducts(e.target.value);
-            }, 300); // 300ms debounce
-        });
+    // Make logo clickable
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.addEventListener('click', () => navigateTo('home'));
     }
     
     // Hamburger menu toggle
@@ -310,17 +304,34 @@ function navigateTo(page) {
 
 // ========== Authentication ==========
 function renderAuth() {
-    const authButtons = document.getElementById('authButtons');
-    const userInfo = document.getElementById('userInfo');
-    const userName = document.getElementById('userName');
+    const authArea = document.getElementById('authArea');
+    
+    if (!authArea) return;
     
     if (state.user) {
-        if (authButtons) authButtons.style.display = 'none';
-        if (userInfo) userInfo.style.display = 'flex';
-        if (userName) userName.textContent = state.user.name || state.user.email;
+        // Show user info with dropdown
+        authArea.innerHTML = `
+            <div class="user-info" style="display: flex;">
+                <span id="userName">${state.user.name || state.user.email}</span>
+                <div class="user-menu">
+                    <i class="fas fa-user icon-btn"></i>
+                    <div class="user-dropdown">
+                        <a href="#" onclick="navigateTo('orders'); return false;">My Orders</a>
+                        <a href="#" onclick="navigateTo('wishlist'); return false;">Wishlist</a>
+                        <a href="#" onclick="navigateTo('cart'); return false;">Cart</a>
+                        <button onclick="handleLogout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        `;
     } else {
-        if (authButtons) authButtons.style.display = 'flex';
-        if (userInfo) userInfo.style.display = 'none';
+        // Show login/signup buttons
+        authArea.innerHTML = `
+            <div class="auth-buttons">
+                <button class="btn btn-outline" onclick="openModal('loginModal')">Login</button>
+                <button class="btn btn-primary" onclick="openModal('registerModal')">Sign Up</button>
+            </div>
+        `;
     }
 }
 
