@@ -18,16 +18,13 @@
     --dark: #333;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin:0; padding:0; }
 
 body {
-    margin: 0;
     font-family: 'Poppins', sans-serif;
     background: var(--light);
     color: var(--dark);
 }
-
-h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 1px; color: var(--secondary); }
 
 /* Banner */
 .banner {
@@ -51,43 +48,21 @@ nav {
     z-index: 100;
 }
 
-.logo img {
-    width: 160px; /* desktop size */
-    max-width: 100%;
-    height: auto;
-}
+.logo img { width: 160px; max-width: 100%; height: auto; }
 
-.nav-links {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--dark);
-    font-weight: 500;
-}
-
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; }
 .nav-links a:hover { color: var(--primary); }
 
-.nav-actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-.btn {
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
+.nav-actions { display: flex; gap: 1rem; align-items: center; }
+.btn { border: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; }
 .login { background: var(--secondary); color: white; }
 .login:hover { background: var(--primary); }
 .logout { background: transparent; border: 1px solid var(--secondary); }
+
+/* Cart & Search */
+.search-bar { padding:0.4rem; border-radius:4px; border:1px solid #ccc; }
+.cart-icon { font-size:1.4rem; cursor:pointer; color: var(--secondary); }
 
 /* Hero */
 .hero {
@@ -96,33 +71,15 @@ nav {
     justify-content: space-between;
     padding: 4rem 2rem;
     min-height: 75vh;
-    background:
-        linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
+    background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
         url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
     background-size: cover;
 }
 
 .hero-content { max-width: 520px; }
-
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.hero p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.cta {
-    background: var(--secondary);
-    color: white;
-    padding: 0.9rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
+.hero h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing:1px; font-size: 3rem; margin-bottom: 1rem; }
+.hero p { font-size: 1rem; margin-bottom: 1.5rem; }
+.cta { background: var(--secondary); color: white; padding: 0.9rem 1.5rem; border-radius:5px; cursor:pointer; }
 .cta:hover { background: var(--primary); }
 
 .trust {
@@ -130,27 +87,64 @@ nav {
     gap: 1rem;
     margin-top: 1.5rem;
 }
-
 .trust div {
     background: var(--accent);
     padding: 0.6rem 0.9rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    border-radius:6px;
+    font-size:0.85rem;
+    font-weight:500;
     color: var(--secondary);
 }
 
-/* Hero image */
-.hero img {
-    max-width: 400px;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+/* Featured Products */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 1.5rem;
+    padding: 3rem 2rem;
 }
+.product-card {
+    background:white;
+    border-radius:10px;
+    padding:1rem;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+.product-card img { width:100%; border-radius:8px; margin-bottom:0.5rem; }
+.product-card h3 { font-size:1.1rem; margin-bottom:0.3rem; }
+.product-card p { color: var(--primary); font-weight:500; margin-bottom:0.5rem; }
+.product-card button { background: var(--secondary); color:white; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; }
+.product-card button:hover { background: var(--primary); }
 
-@media (max-width: 768px) {
-    .hero { flex-direction: column; text-align: center; }
-    .nav-links { display: none; }
-    .logo img { width: 120px; }
+/* Special Deals */
+.special-deals {
+    background: var(--primary);
+    color:white;
+    padding: 2rem;
+    text-align:center;
+}
+.special-deals h2 { margin-bottom:1rem; }
+.countdown { font-weight:bold; font-size:1.2rem; }
+
+/* Footer */
+footer {
+    background: var(--dark);
+    color: white;
+    padding: 2rem;
+}
+footer .footer-links, footer .social, footer .newsletter { display:flex; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+footer a { color:white; text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+footer input[type=email] { padding:0.5rem; border-radius:4px; border:none; }
+footer button { padding:0.5rem 1rem; border:none; border-radius:4px; background: var(--accent); color: var(--secondary); cursor:pointer; }
+footer button:hover { background: var(--secondary); color:white; }
+
+.hero img { max-width:400px; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,0.15); }
+
+@media (max-width: 768px){
+    .hero { flex-direction: column; text-align:center; }
+    .nav-links { display:none; }
+    .logo img { width:120px; }
 }
 </style>
 </head>
@@ -174,7 +168,8 @@ nav {
     </ul>
 
     <div class="nav-actions" id="authArea">
-        <!-- Dynamic login/logout buttons -->
+        <input type="text" class="search-bar" placeholder="Search products...">
+        <span class="cart-icon">🛒</span>
     </div>
 </nav>
 
@@ -182,10 +177,7 @@ nav {
     <div class="hero-content">
         <p>Discover Your Perfect Look</p>
         <h1>Premium Hair Wigs & Extensions</h1>
-        <p>
-            Enhance your natural beauty with our exquisite collection of high-quality hair wigs and extensions.
-        </p>
-
+        <p>Enhance your natural beauty with our exquisite collection of high-quality hair wigs and extensions.</p>
         <button class="cta" data-page="shop">SHOP NOW</button>
 
         <div class="trust">
@@ -198,14 +190,62 @@ nav {
     <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71" alt="Model with Premium Hair Wig">
 </section>
 
+<section class="products">
+    <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1600180758895-7f0a6b7f83e5" alt="Product 1">
+        <h3>Luxury Wig</h3>
+        <p>R1,500</p>
+        <button>Add to Cart</button>
+    </div>
+    <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1616628189931-91c8aa62f5a2" alt="Product 2">
+        <h3>Silk Extensions</h3>
+        <p>R850</p>
+        <button>Add to Cart</button>
+    </div>
+    <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1600180758895-7f0a6b7f83e5" alt="Product 3">
+        <h3>Curl Wig</h3>
+        <p>R1,200</p>
+        <button>Add to Cart</button>
+    </div>
+</section>
+
+<section class="special-deals">
+    <h2>Limited-Time Offer!</h2>
+    <p>Get 20% off on selected items. Hurry, offer ends in <span class="countdown">24:00:00</span></p>
+</section>
+
+<footer>
+    <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+    </div>
+    <div class="social">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+    </div>
+    <div class="newsletter">
+        <input type="email" placeholder="Your email">
+        <button>Subscribe</button>
+    </div>
+    <p>© 2026 Hair Bubbles. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+</footer>
+
 <script>
 let isLoggedIn = false;
 const authArea = document.getElementById("authArea");
 
 function renderAuth() {
-    authArea.innerHTML = isLoggedIn
-        ? `<button class="btn logout" id="logoutBtn">Logout</button>`
-        : `<button class="btn login" id="loginBtn">Login</button>`;
+    authArea.innerHTML = `
+        <input type="text" class="search-bar" placeholder="Search products...">
+        <span class="cart-icon">🛒</span>
+        ${isLoggedIn ? '<button class="btn logout" id="logoutBtn">Logout</button>' : '<button class="btn login" id="loginBtn">Login</button>'}
+    `;
 }
 
 document.addEventListener("click", (e) => {
