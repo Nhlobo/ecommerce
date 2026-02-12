@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
+<title>Hair Bubbles SA - Premium Hair Weaves & Extensions</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -27,9 +27,8 @@ body {
     color: var(--dark);
 }
 
-h1 { font-family: 'Playfair Display', serif; }
+h1, h2, h3 { margin: 0; }
 
-/* Banner */
 .banner {
     background: var(--secondary);
     color: white;
@@ -38,7 +37,7 @@ h1 { font-family: 'Playfair Display', serif; }
     font-size: 0.9rem;
 }
 
-/* Nav */
+/* Navigation */
 nav {
     background: white;
     display: flex;
@@ -48,12 +47,13 @@ nav {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     position: sticky;
     top: 0;
+    z-index: 100;
 }
 
-.logo {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: var(--secondary);
+.logo img {
+    width: 160px;  /* Desktop default */
+    max-width: 100%;
+    height: auto;
 }
 
 .nav-links {
@@ -86,7 +86,6 @@ nav {
 
 .login { background: var(--secondary); color: white; }
 .login:hover { background: var(--primary); }
-
 .logout { background: transparent; border: 1px solid var(--secondary); }
 
 /* Hero */
@@ -105,9 +104,17 @@ nav {
 .hero-content { max-width: 520px; }
 
 .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
     font-size: 3rem;
+    font-style: italic;
+    letter-spacing: 1px;
     color: var(--secondary);
-    margin: 0.5rem 0;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .cta {
@@ -121,7 +128,7 @@ nav {
 
 .cta:hover { background: var(--primary); }
 
-/* Trust Badges */
+/* Trust badges */
 .trust {
     display: flex;
     gap: 1rem;
@@ -129,15 +136,15 @@ nav {
 }
 
 .trust div {
-    background: white;
+    background: var(--accent);
     padding: 0.6rem 0.9rem;
     border-radius: 6px;
     font-size: 0.85rem;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
+    font-weight: 500;
+    color: var(--secondary);
 }
 
-/* Image */
+/* Hero image */
 .hero img {
     max-width: 400px;
     border-radius: 10px;
@@ -147,52 +154,56 @@ nav {
 @media (max-width: 768px) {
     .hero { flex-direction: column; text-align: center; }
     .nav-links { display: none; }
+    .logo img { width: 120px; }
 }
 </style>
 </head>
 
 <body>
-
 <div class="banner">
-    Secure Payments • Premium Quality • Nationwide Delivery
+    Secure SA Payments • Fast Nationwide Delivery • Professional Hair & Makeup
 </div>
 
 <nav>
-    <div class="logo">Hair Bubbles</div>
+    <div class="logo">
+        <img src="logo.png" alt="Hair Bubbles Logo">
+    </div>
 
     <ul class="nav-links">
         <li><a href="#" data-page="home">Home</a></li>
         <li><a href="#" data-page="shop">Shop</a></li>
         <li><a href="#" data-page="checkout">Checkout</a></li>
+        <li><a href="#" data-page="services">Services</a></li>
     </ul>
 
     <div class="nav-actions" id="authArea">
-        <!-- Dynamic -->
+        <!-- Dynamic login/logout -->
     </div>
 </nav>
 
 <section class="hero">
     <div class="hero-content">
-        <p>Discover Your Perfect Look</p>
-        <h1>Premium Hair Wigs & Extensions</h1>
-        <p>Luxury styles designed for confidence and comfort.</p>
+        <p>Your Luxury Hair Destination in South Africa</p>
+        <h1>Premium Hair Weaves & Extensions</h1>
+        <p>
+            We provide high-quality hair, professional installation, and beauty services.
+            Enhance your style with our exclusive collection of wigs, weaves, and expert makeup services.
+        </p>
 
         <button class="cta" data-page="shop">Shop Now</button>
 
         <div class="trust">
             <div>Secure Checkout</div>
-            <div>Fast Delivery</div>
-            <div>Quality Guarantee</div>
+            <div>Fast Nationwide Delivery</div>
+            <div>Expert Hair & Makeup</div>
         </div>
     </div>
 
-    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9" 
-         alt="Premium Hair Wig">
+    <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71" alt="Premium Hair Wig">
 </section>
 
 <script>
 let isLoggedIn = false;
-
 const authArea = document.getElementById("authArea");
 
 function renderAuth() {
@@ -202,16 +213,13 @@ function renderAuth() {
 }
 
 document.addEventListener("click", (e) => {
-
     const pageLink = e.target.closest("[data-page]");
     if (pageLink) {
         const page = pageLink.dataset.page;
-
         if (page === "checkout" && !isLoggedIn) {
             alert("Please log in to proceed to checkout.");
             return;
         }
-
         alert("Navigate to: " + page);
     }
 
@@ -228,6 +236,5 @@ document.addEventListener("click", (e) => {
 
 renderAuth();
 </script>
-
 </body>
 </html>
