@@ -1,6 +1,49 @@
 # Premium Hair Wigs & Extensions E-commerce Platform
 
-A complete, production-ready **full-stack** e-commerce platform for a premium hair wigs and extensions business. Features a customer-facing storefront and a **secure, production-grade Admin Dashboard** with backend server, database, and comprehensive business management tools.
+A complete, production-ready **full-stack** e-commerce platform for a premium hair wigs and extensions business. **Now separated into three independent deployable components**: customer-facing storefront (GitHub Pages), backend API with database (Render), and secure admin dashboard (Render).
+
+## 🎯 New Architecture - Separated Components
+
+This repository is now organized into **three separate applications** that can be deployed independently:
+
+```
+ecommerce/
+├── frontend-ecommerce/      → Deploy to GitHub Pages
+├── backend-ecommerce/       → Deploy to Render (with PostgreSQL)
+└── admin-ecommerce/         → Deploy to Render
+```
+
+### Quick Links
+- 📖 **[QUICK_START.md](./QUICK_START.md)** - 30-minute deployment guide
+- 📚 **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
+- 🏗️ **[REPOSITORY_README.md](./REPOSITORY_README.md)** - Detailed architecture documentation
+
+## 🚀 Quick Deployment
+
+### Step 1: Create Three GitHub Repositories
+```bash
+# Frontend
+cd frontend-ecommerce && git init && git add . && git commit -m "Initial commit"
+
+# Backend
+cd ../backend-ecommerce && git init && git add . && git commit -m "Initial commit"
+
+# Admin
+cd ../admin-ecommerce && git init && git add . && git commit -m "Initial commit"
+```
+
+### Step 2: Deploy to Hosting Services
+
+| Component | Deploy To | Time |
+|-----------|-----------|------|
+| 🗄️ Database | Render PostgreSQL | 3 min |
+| ⚙️ Backend API | Render Web Service | 5 min |
+| 🔐 Admin Dashboard | Render Web Service | 5 min |
+| 🛒 Frontend Store | GitHub Pages | 3 min |
+
+**Total deployment time: ~30 minutes**
+
+👉 Follow **[QUICK_START.md](./QUICK_START.md)** for step-by-step instructions.
 
 ## 🚀 About Premium Hair Wigs & Extensions
 
@@ -76,8 +119,78 @@ A complete, production-ready **full-stack** e-commerce platform for a premium ha
 
 ## 📁 Project Structure
 
+This repository contains three separate, deployable applications:
+
 ```
 ecommerce/
+│
+├── frontend-ecommerce/          # 🛒 Customer Storefront
+│   ├── index.html              # Main storefront page
+│   ├── styles.css              # Storefront styles
+│   ├── assets/                 # Images and static files
+│   ├── js/
+│   │   ├── config.js          # API configuration (update backend URL here)
+│   │   ├── api.js             # API service layer
+│   │   └── app.js             # Main application logic
+│   └── README.md              # Frontend deployment guide
+│
+├── backend-ecommerce/           # ⚙️ Backend API Server
+│   ├── server.js               # Express server entry point
+│   ├── package.json            # Backend dependencies
+│   ├── .env.example            # Environment variables template
+│   ├── controllers/            # API controllers
+│   ├── middleware/             # Auth, validation, rate limiting
+│   ├── routes/                 # API routes
+│   ├── db/                     # Database connection and schema
+│   └── README.md              # Backend deployment guide
+│
+├── admin-ecommerce/             # 🔐 Admin Dashboard
+│   ├── server.js               # Admin server (serves static files)
+│   ├── package.json            # Admin dependencies
+│   ├── index.html              # Admin dashboard
+│   ├── login.html              # Admin login page
+│   ├── css/                    # Admin styles
+│   ├── js/
+│   │   ├── config.js          # Admin API configuration (update backend URL)
+│   │   ├── login.js           # Login logic
+│   │   └── admin.js           # Dashboard logic
+│   └── README.md              # Admin deployment guide
+│
+├── QUICK_START.md              # 30-minute deployment guide
+├── DEPLOYMENT_GUIDE.md         # Complete deployment instructions
+├── REPOSITORY_README.md        # Detailed architecture docs
+└── README.md                   # This file
+```
+
+## 🌐 Architecture
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                     FRONTEND (GitHub Pages)                  │
+│          Customer-facing E-commerce Storefront               │
+│   https://YOUR_USERNAME.github.io/ecommerce-frontend         │
+└──────────────────────┬───────────────────────────────────────┘
+                       │
+                       │ Fetch API (REST)
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│              BACKEND API (Render - Node.js)                  │
+│          Express.js + PostgreSQL Database                    │
+│        https://premium-hair-backend.onrender.com             │
+│                                                              │
+│  REST API: /api/products, /api/orders, /api/auth...         │
+└──────────────────────┬───────────────────────────────────────┘
+                       ▲
+                       │ Fetch API (REST)
+                       │
+┌──────────────────────┴───────────────────────────────────────┐
+│              ADMIN DASHBOARD (Render - Node.js)              │
+│           Secure Admin Management Interface                  │
+│        https://premium-hair-admin.onrender.com               │
+└──────────────────────────────────────────────────────────────┘
+```
+
+## 📁 Project Structure (Legacy)
 ├── index.html                     # Customer-facing storefront
 ├── styles.css                     # Storefront styles
 ├── js/
@@ -117,74 +230,112 @@ ecommerce/
 └── .gitignore                     # Git ignore rules
 ```
 
-## 🛠️ Setup Instructions
+## 🛠️ Deployment & Setup
 
-### For Customer-Facing Storefront
+### 🚀 Production Deployment (Recommended)
 
-#### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local web server (optional, for testing)
+Deploy each component separately for best performance and scalability:
 
-#### Installation
+#### Option 1: Quick Deployment (30 minutes)
+Follow the **[QUICK_START.md](./QUICK_START.md)** guide:
+- Create 3 GitHub repositories
+- Deploy database to Render PostgreSQL (3 min)
+- Deploy backend to Render (5 min)
+- Deploy admin to Render (5 min)
+- Deploy frontend to GitHub Pages (3 min)
+- Configure connections (5 min)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Nhlobo/ecommerce.git
-   cd ecommerce
-   ```
+#### Option 2: Detailed Deployment
+Follow the **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** for comprehensive step-by-step instructions.
 
-2. **Open in browser**
-   - Simply open `index.html` in your web browser
-   - Or use a local server:
-     ```bash
-     # Python
-     python -m http.server 8000
-     
-     # Node.js
-     npx serve
-     
-     # PHP
-     php -S localhost:8000
-     ```
+### 💻 Local Development
 
-3. **Access the application**
-   - Direct file: `file:///path/to/ecommerce/index.html`
-   - Local server: `http://localhost:8000`
+For local development and testing:
+
+#### 1. Backend + Database
+
+```bash
+cd backend-ecommerce
+
+# Install dependencies
+npm install
+
+# Setup environment
+cp .env.example .env
+# Edit .env with your local database credentials
+
+# Initialize database (PostgreSQL must be running)
+npm run init-db
+
+# Start backend server
+npm run dev
+# Runs on http://localhost:3000
+```
+
+#### 2. Admin Dashboard
+
+```bash
+cd admin-ecommerce
+
+# Install dependencies
+npm install
+
+# Update config to use local backend
+# Edit js/config.js: API_BASE_URL should be 'http://localhost:3000'
+
+# Start admin server
+npm start
+# Runs on http://localhost:3001
+
+# Open browser: http://localhost:3001/login.html
+```
+
+#### 3. Frontend Storefront
+
+```bash
+cd frontend-ecommerce
+
+# Update config to use local backend
+# Edit js/config.js: return 'http://localhost:3000' in getBackendUrl()
+
+# Start local server (choose one):
+
+# Python
+python -m http.server 8000
+
+# Node.js
+npx http-server
+
+# VS Code Live Server
+# Right-click index.html → "Open with Live Server"
+
+# Open browser: http://localhost:8000
+```
+
+### 🔧 Configuration
+
+Each component requires configuration to connect to the backend:
+
+**Frontend** (`frontend-ecommerce/js/config.js`):
+```javascript
+return 'https://your-backend-url.onrender.com';
+```
+
+**Admin** (`admin-ecommerce/js/config.js`):
+```javascript
+API_BASE_URL: 'https://your-backend-url.onrender.com'
+```
+
+**Backend** (`.env`):
+```env
+DATABASE_URL=postgresql://...
+FRONTEND_URL=https://username.github.io/ecommerce-frontend
+ADMIN_URL=https://admin.onrender.com
+```
 
 ---
 
-### 🔐 For Admin Dashboard (Production Setup)
-
-#### Prerequisites
-- Node.js (v14 or higher)
-- PostgreSQL (v12 or higher)
-- npm or yarn
-
-#### Quick Start
-
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Configure environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database credentials and secrets
-   ```
-
-3. **Initialize database**
-   ```bash
-   npm run init-db
-   ```
-
-4. **Start the server**
-   ```bash
-   # Development
-   npm run dev
-   
-   # Production
-   npm start
+## 🛠️ Legacy Setup Instructions (Old Monolithic Structure)
    ```
 
 5. **Access admin dashboard**
