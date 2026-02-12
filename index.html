@@ -4,41 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary-color: #8B4513; /* SaddleBrown */
-            --secondary-color: #5C4033; /* DarkBrown */
-            --accent-color: #D2B48C; /* Tan */
-            --light-color: #F5F5F5; /* LightGray */
-            --dark-color: #333; /* DarkGray */
+            --primary-color: #8B4513;
+            --secondary-color: #5C4033;
+            --accent-color: #D2B48C;
+            --light-color: #F5F5F5;
+            --dark-color: #333;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Poppins', sans-serif;
         }
 
-        body {
-            font-family: var(--font-body);
-            margin: 0;
-            padding: 0;
-            color: var(--dark-color);
-            line-height: 1.6;
-            background-color: var(--light-color);
+        * {
+            box-sizing: border-box;
         }
 
-        h1, h2, h3, h4 {
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        h1, h2, h3 {
             font-family: var(--font-heading);
         }
 
-        /* Promotional Banner */
+        /* Promo Banner */
         .promo-banner {
             background: var(--secondary-color);
             color: white;
             text-align: center;
-            padding: 0.7rem;
+            padding: 0.6rem;
             font-size: 0.9rem;
-            font-weight: 500;
         }
 
         /* Navigation */
@@ -48,14 +52,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: var(--secondary-color);
         }
@@ -63,152 +67,190 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 1.5rem;
+            padding: 0;
+            margin: 0;
         }
 
         .nav-links a {
             text-decoration: none;
             color: var(--dark-color);
             font-weight: 500;
-            transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
             color: var(--primary-color);
         }
 
-        .nav-icons {
+        .nav-actions {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             align-items: center;
         }
 
-        .nav-icons a {
-            color: var(--dark-color);
-            font-size: 1.3rem;
-            transition: color 0.3s ease;
+        .nav-actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
-        .nav-icons a:hover {
-            color: var(--primary-color);
+        .login-btn {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
         }
 
-        /* Hero Section */
+        .login-btn:hover {
+            background: var(--primary-color);
+        }
+
+        /* Hero */
         .hero {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 4rem 2rem;
-            min-height: 70vh;
-            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
-                        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            min-height: 75vh;
+            background:
+                linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+                url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
             background-size: cover;
             background-position: center;
         }
 
         .hero-content {
-            max-width: 600px;
-            padding: 2rem;
+            max-width: 520px;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
+            margin: 0.5rem 0;
             color: var(--secondary-color);
-            margin-bottom: 1rem;
-            line-height: 1.2;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: var(--dark-color);
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
         }
 
         .cta-button {
             background: var(--secondary-color);
             color: white;
-            padding: 1rem 2rem;
             border: none;
+            padding: 0.9rem 1.6rem;
             border-radius: 5px;
-            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
         }
 
         .cta-button:hover {
             background: var(--primary-color);
         }
 
-        .hero-image {
-            flex: 1;
-            text-align: center;
+        .trust-badges {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .trust-badges span {
+            display: inline-block;
+            margin-right: 1rem;
         }
 
         .hero-image img {
-            max-width: 100%;
+            max-width: 420px;
+            width: 100%;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .hero {
                 flex-direction: column;
                 text-align: center;
             }
 
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
             .nav-links {
                 display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
             }
         }
     </style>
 </head>
+
 <body>
-    <!-- Promotional Banner -->
+
     <div class="promo-banner">
-        Limited Time Offer! Get 20% Off All Hair Products
+        Limited Time Offer — 20% Off Selected Items
     </div>
 
-    <!-- Navigation -->
-    <nav>
+    <nav role="navigation">
         <div class="logo">Hair Bubbles</div>
+
         <ul class="nav-links">
-            <li><a href="#" onclick="navigateTo('home')">Home</a></li>
-            <li><a href="#" onclick="navigateTo('shop')">Shop</a></li>
-            <li><a href="#" onclick="navigateTo('collection')">Collection</a></li>
-            <li><a href="#" onclick="navigateTo('blog')">Blog</a></li>
-            <li><a href="#" onclick="navigateTo('sale')">Sale</a></li>
-            <li><a href="#" onclick="navigateTo('contact')">Contact</a></li>
+            <li><a href="#" data-page="home">Home</a></li>
+            <li><a href="#" data-page="shop">Shop</a></li>
+            <li><a href="#" data-page="collection">Collection</a></li>
+            <li><a href="#" data-page="sale">Sale</a></li>
+            <li><a href="#" data-page="contact">Contact</a></li>
         </ul>
-        <div class="nav-icons">
-            <a href="#" onclick="navigateTo('search')">🔍</a>
-            <a href="#" onclick="navigateTo('cart')">🛒</a>
+
+        <div class="nav-actions">
+            <button aria-label="Search">🔍</button>
+            <button aria-label="Cart">🛒</button>
+            <button class="login-btn" data-page="login">Login</button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <p>Discover Your Perfect Look</p>
             <h1>Premium Hair Wigs & Extensions</h1>
-            <p>Enhance your natural beauty with our exquisite collection of high-quality hair wigs and extensions.</p>
-            <button class="cta-button" onclick="navigateTo('shop')">SHOP NOW</button>
+            <p>
+                Enhance your beauty with our high-quality wigs and extensions.
+                Designed for comfort, style, and confidence.
+            </p>
+
+            <button class="cta-button" data-page="shop">
+                Shop Now
+            </button>
+
+            <div class="trust-badges">
+                <span>✔ Secure Checkout</span>
+                <span>✔ Fast Delivery</span>
+                <span>✔ Quality Guarantee</span>
+            </div>
         </div>
+
         <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Model with Premium Hair Wig">
+            <img 
+                src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71"
+                alt="Model showcasing premium hair wig"
+            >
         </div>
     </section>
 
-    <!-- JavaScript for Navigation -->
     <script>
-        function navigateTo(page) {
-            alert(`Navigating to ${page} page.`);
-            // In a real application, you would use:
+        document.addEventListener("click", (e) => {
+            const target = e.target.closest("[data-page]");
+            if (!target) return;
+
+            const page = target.dataset.page;
+
+            // Example navigation logic
+            console.log("Navigate to:", page);
+
+            // Real usage:
             // window.location.href = `/${page}`;
-        }
+        });
     </script>
+
 </body>
 </html>
