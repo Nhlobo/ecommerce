@@ -161,7 +161,6 @@ function setupEventListeners() {
     const logo = document.querySelector('.logo');
     if (logo) {
         logo.addEventListener('click', () => navigateTo('home'));
-        logo.style.cursor = 'pointer';
     }
     
     // Hamburger menu toggle
