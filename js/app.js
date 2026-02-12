@@ -19,13 +19,14 @@ let state = {
 // Initialize API Service
 let apiService = null;
 
-// Session timeout variables
+// Session timeout configuration - 30 minutes based on industry standard for e-commerce security
+// This balances user convenience with security best practices
 let inactivityTimer;
 const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 
 // ========== Network Monitoring ==========
 function handleOffline() {
-    showNotification('You are offline. Please check your internet connection.', 'error', 0);
+    showNotification('You are offline. Please check your internet connection.', 'error', NOTIFICATION_PERSISTENT);
     document.body.classList.add('offline-mode');
 }
 
@@ -47,6 +48,20 @@ function resetInactivityTimer() {
     }
 }
 
+// Throttle function to limit how often a function can be called
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
 // ========== Skeleton Loader Helper ==========
 function createSkeletonLoader(count = 6) {
     return Array(count).fill(0).map(() => `
@@ -60,18 +75,37 @@ function createSkeletonLoader(count = 6) {
 }
 
 // ========== Error Recovery UI ==========
-function showErrorWithRetry(message, retryFunction) {
-    return `
+function showErrorWithRetry(message, retryFunctionName) {
+    const container = document.createElement('div');
+    container.innerHTML = `
         <div class="error-container">
             <div class="error-icon">⚠️</div>
             <h3>Oops! Something went wrong</h3>
             <p>${message}</p>
             <div class="error-actions">
-                <button class="btn btn-primary" onclick="${retryFunction}">Try Again</button>
-                <button class="btn btn-outline" onclick="navigateTo('home')">Go Home</button>
+                <button class="btn btn-primary" data-retry="${retryFunctionName}">Try Again</button>
+                <button class="btn btn-outline" data-navigate="home">Go Home</button>
             </div>
         </div>
     `;
+    
+    // Add event listeners
+    const retryBtn = container.querySelector('[data-retry]');
+    const homeBtn = container.querySelector('[data-navigate]');
+    
+    if (retryBtn) {
+        retryBtn.addEventListener('click', () => {
+            if (typeof window[retryFunctionName] === 'function') {
+                window[retryFunctionName]();
+            }
+        });
+    }
+    
+    if (homeBtn) {
+        homeBtn.addEventListener('click', () => navigateTo('home'));
+    }
+    
+    return container.innerHTML;
 }
 
 // ========== Initialization ==========
@@ -85,7 +119,8 @@ function init() {
         window.addEventListener('offline', handleOffline);
         
         // Monitor user activity for session timeout
-        document.addEventListener('mousemove', resetInactivityTimer);
+        // Throttle mousemove to prevent performance issues (max once per 5 seconds)
+        document.addEventListener('mousemove', throttle(resetInactivityTimer, 5000));
         document.addEventListener('keypress', resetInactivityTimer);
         document.addEventListener('click', resetInactivityTimer);
         
@@ -902,6 +937,10 @@ function switchModal(closeId, openId) {
 }
 
 // ========== Notification System ==========
+// ========== Notification System ==========
+// Constants for notification behavior
+const NOTIFICATION_PERSISTENT = 0;
+
 function showNotification(message, type = 'info', duration = 3000, action = null) {
     // Remove existing notifications
     document.querySelectorAll('.notification').forEach(n => n.remove());
@@ -923,14 +962,39 @@ function showNotification(message, type = 'info', duration = 3000, action = null
         info: 'ℹ'
     };
     
-    notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-icon">${icons[type]}</span>
-            <span class="notification-message">${message}</span>
-            ${action ? `<button class="notification-action" onclick="${action.onClick}">${action.text}</button>` : ''}
-            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
-        </div>
-    `;
+    // Create notification content
+    const content = document.createElement('div');
+    content.className = 'notification-content';
+    
+    // Add icon
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'notification-icon';
+    iconSpan.textContent = icons[type];
+    content.appendChild(iconSpan);
+    
+    // Add message
+    const messageSpan = document.createElement('span');
+    messageSpan.className = 'notification-message';
+    messageSpan.textContent = message;
+    content.appendChild(messageSpan);
+    
+    // Add action button if provided
+    if (action && action.callback && action.text) {
+        const actionBtn = document.createElement('button');
+        actionBtn.className = 'notification-action';
+        actionBtn.textContent = action.text;
+        actionBtn.addEventListener('click', action.callback);
+        content.appendChild(actionBtn);
+    }
+    
+    // Add close button
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'notification-close';
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', () => notification.remove());
+    content.appendChild(closeBtn);
+    
+    notification.appendChild(content);
     
     notification.style.cssText = `
         position: fixed;
@@ -949,6 +1013,7 @@ function showNotification(message, type = 'info', duration = 3000, action = null
     
     document.body.appendChild(notification);
     
+    // Auto-dismiss if duration > 0 (use NOTIFICATION_PERSISTENT for persistent notifications)
     if (duration > 0) {
         setTimeout(() => {
             notification.style.animation = 'slideOut 0.3s ease';

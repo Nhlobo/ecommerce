@@ -1320,19 +1320,7 @@ footer {
 }
 
 /* ===== OFFLINE MODE ===== */
-.offline-banner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: #dc3545;
-    color: white;
-    padding: 0.8rem;
-    text-align: center;
-    z-index: 9999;
-    font-weight: 600;
-}
-
+/* Using pseudo-element for offline banner to avoid having to create/destroy DOM elements */
 body.offline-mode::before {
     content: '⚠️ No Internet Connection - Some features may not work';
     position: fixed;
