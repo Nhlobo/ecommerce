@@ -19,11 +19,75 @@ let state = {
 // Initialize API Service
 let apiService = null;
 
+// Session timeout variables
+let inactivityTimer;
+const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
+// ========== Network Monitoring ==========
+function handleOffline() {
+    showNotification('You are offline. Please check your internet connection.', 'error', 0);
+    document.body.classList.add('offline-mode');
+}
+
+function handleOnline() {
+    showNotification('Connection restored!', 'success');
+    document.body.classList.remove('offline-mode');
+    // Retry failed requests
+    loadProducts();
+}
+
+// ========== Session Timeout Handler ==========
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    if (state.user) {
+        inactivityTimer = setTimeout(() => {
+            showNotification('Your session has expired due to inactivity. Please login again.', 'warning', 5000);
+            handleLogout();
+        }, INACTIVITY_TIMEOUT);
+    }
+}
+
+// ========== Skeleton Loader Helper ==========
+function createSkeletonLoader(count = 6) {
+    return Array(count).fill(0).map(() => `
+        <div class="skeleton-product-card">
+            <div class="skeleton skeleton-image"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text short"></div>
+            <div class="skeleton skeleton-button"></div>
+        </div>
+    `).join('');
+}
+
+// ========== Error Recovery UI ==========
+function showErrorWithRetry(message, retryFunction) {
+    return `
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <h3>Oops! Something went wrong</h3>
+            <p>${message}</p>
+            <div class="error-actions">
+                <button class="btn btn-primary" onclick="${retryFunction}">Try Again</button>
+                <button class="btn btn-outline" onclick="navigateTo('home')">Go Home</button>
+            </div>
+        </div>
+    `;
+}
+
 // ========== Initialization ==========
 function init() {
     try {
         // Initialize API service
         apiService = new APIService({ API_CONFIG, APP_CONFIG, BUSINESS_INFO });
+        
+        // Monitor network status
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+        
+        // Monitor user activity for session timeout
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+        document.addEventListener('click', resetInactivityTimer);
         
         // Load initial data
         loadProducts();
@@ -39,6 +103,15 @@ function init() {
         
         // Show home page by default
         navigateTo('home');
+        
+        // Hide page loader after initialization
+        setTimeout(() => {
+            const pageLoader = document.getElementById('pageLoader');
+            if (pageLoader) {
+                pageLoader.classList.add('hidden');
+                setTimeout(() => pageLoader.remove(), 500);
+            }
+        }, 500);
         
         console.log('App initialized successfully');
     } catch (error) {
@@ -219,6 +292,10 @@ function renderAuth() {
 async function handleLogin(e) {
     e.preventDefault();
     
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+    
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
@@ -233,14 +310,24 @@ async function handleLogin(e) {
         
         // Reset form
         e.target.reset();
+        
+        // Reset inactivity timer
+        resetInactivityTimer();
     } catch (error) {
         console.error('Login error:', error);
         showNotification(error.message || 'Login failed', 'error');
+    } finally {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
     }
 }
 
 async function handleRegister(e) {
     e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
     
     const name = document.getElementById('registerName').value;
     const email = document.getElementById('registerEmail').value;
@@ -249,6 +336,8 @@ async function handleRegister(e) {
     
     if (password !== confirmPassword) {
         showNotification('Passwords do not match', 'error');
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
         return;
     }
     
@@ -263,9 +352,15 @@ async function handleRegister(e) {
         
         // Reset form
         e.target.reset();
+        
+        // Reset inactivity timer
+        resetInactivityTimer();
     } catch (error) {
         console.error('Registration error:', error);
         showNotification(error.message || 'Registration failed', 'error');
+    } finally {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
     }
 }
 
@@ -284,6 +379,12 @@ function renderFeaturedProducts() {
     const container = document.getElementById('featuredProducts');
     if (!container) return;
     
+    // Show skeleton loader if loading
+    if (state.isLoading) {
+        container.innerHTML = createSkeletonLoader(4);
+        return;
+    }
+    
     const featured = state.products.slice(0, 4);
     container.innerHTML = featured.map(product => createProductCard(product)).join('');
 }
@@ -291,6 +392,12 @@ function renderFeaturedProducts() {
 function renderAllProducts() {
     const container = document.getElementById('allProducts');
     if (!container) return;
+    
+    // Show skeleton loader if loading
+    if (state.isLoading) {
+        container.innerHTML = createSkeletonLoader(6);
+        return;
+    }
     
     let filtered = state.products;
     
@@ -318,6 +425,12 @@ function renderAllProducts() {
 function renderSaleProducts() {
     const container = document.getElementById('saleProducts');
     if (!container) return;
+    
+    // Show skeleton loader if loading
+    if (state.isLoading) {
+        container.innerHTML = createSkeletonLoader(6);
+        return;
+    }
     
     // Products on sale (assuming products with 'onSale' flag or discount)
     const saleProducts = state.products.filter(p => p.onSale || p.discount > 0).slice(0, 6);
@@ -502,14 +615,22 @@ function renderCheckout() {
 async function handleCheckout(e) {
     e.preventDefault();
     
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+    
     if (!state.user) {
         showNotification('Please login to checkout', 'error');
         openModal('loginModal');
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
         return;
     }
     
     if (state.cart.length === 0) {
         showNotification('Your cart is empty', 'error');
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
         return;
     }
     
@@ -555,6 +676,9 @@ async function handleCheckout(e) {
     } catch (error) {
         console.error('Checkout error:', error);
         showNotification(error.message || 'Failed to place order', 'error');
+    } finally {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
     }
 }
 
@@ -708,6 +832,10 @@ function renderWishlist() {
 async function handleContactFormSubmit(e) {
     e.preventDefault();
     
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+    
     const formData = new FormData(e.target);
     const data = {
         name: formData.get('name'),
@@ -722,12 +850,19 @@ async function handleContactFormSubmit(e) {
         e.target.reset();
     } catch (error) {
         console.error('Contact form error:', error);
-        showNotification('Failed to send message. Please try again.', 'error');
+        showNotification(error.message || 'Failed to send message. Please try again.', 'error');
+    } finally {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
     }
 }
 
 async function handleNewsletterSubmit(e) {
     e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
     
     const email = document.getElementById('newsletterEmail').value;
     
@@ -737,7 +872,10 @@ async function handleNewsletterSubmit(e) {
         e.target.reset();
     } catch (error) {
         console.error('Newsletter subscription error:', error);
-        showNotification('Failed to subscribe. Please try again.', 'error');
+        showNotification(error.message || 'Failed to subscribe. Please try again.', 'error');
+    } finally {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
     }
 }
 
@@ -764,21 +902,59 @@ function switchModal(closeId, openId) {
 }
 
 // ========== Notification System ==========
-function showNotification(message, type = 'info') {
+function showNotification(message, type = 'info', duration = 3000, action = null) {
+    // Remove existing notifications
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
     const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.className = `notification notification-${type}`;
+    
+    const colors = {
+        success: '#28a745',
+        error: '#dc3545',
+        warning: '#ffc107',
+        info: '#17a2b8'
+    };
+    
+    const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+    };
+    
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span class="notification-icon">${icons[type]}</span>
+            <span class="notification-message">${message}</span>
+            ${action ? `<button class="notification-action" onclick="${action.onClick}">${action.text}</button>` : ''}
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+    `;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        min-width: 300px;
+        max-width: 400px;
+        background: ${colors[type]};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        overflow: hidden;
+    `;
     
     document.body.appendChild(notification);
     
-    // Trigger animation
-    setTimeout(() => notification.classList.add('show'), 10);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
+    if (duration > 0) {
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+    }
 }
 
 // ========== Countdown Timer ==========

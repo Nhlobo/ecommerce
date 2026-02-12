@@ -28,11 +28,43 @@ class APIService {
      * Handle API response
      */
     async handleResponse(response) {
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({ message: 'An error occurred' }));
-            throw new Error(error.message || 'API request failed');
+        // Handle network errors
+        if (!response) {
+            throw new Error('Network error. Please check your internet connection.');
         }
-        return response.json();
+        
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            throw new Error('Server response error. Please try again later.');
+        }
+        
+        if (!response.ok) {
+            // Handle specific HTTP errors
+            switch (response.status) {
+                case 400:
+                    throw new Error(data.message || 'Invalid request. Please check your input.');
+                case 401:
+                    // Session expired
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                    throw new Error('Session expired. Please login again.');
+                case 403:
+                    throw new Error('Access denied. You do not have permission.');
+                case 404:
+                    throw new Error(data.message || 'Resource not found.');
+                case 500:
+                    throw new Error('Server error. Please try again later.');
+                case 503:
+                    throw new Error('Service temporarily unavailable. Please try again later.');
+                default:
+                    throw new Error(data.message || 'Something went wrong. Please try again.');
+            }
+        }
+        
+        return data;
     }
 
     /**
