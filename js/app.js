@@ -192,10 +192,6 @@ async function init() {
         }
     }
 }
-        console.error('Initialization error:', error);
-        showNotification('Failed to initialize app', 'error');
-    }
-}
 
 // ========== Event Listeners Setup ==========
 function setupEventListeners() {
@@ -279,6 +275,13 @@ async function loadProducts() {
         const data = await apiService.getAllProducts();
         state.products = data.products || [];
         console.log('Products loaded from API:', state.products.length);
+        
+        // If API returns empty array, use fallback
+        if (state.products.length === 0) {
+            console.log('API returned empty products, using fallback products...');
+            state.products = getFallbackProducts();
+            console.log('Fallback products loaded:', state.products.length);
+        }
     } catch (error) {
         console.error('Error loading products from API:', error);
         console.log('Using fallback products...');
