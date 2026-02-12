@@ -1,1369 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hair Bubbles - Premium Hair Wigs & Extensions</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-:root {
-    --primary: #8B4513;
-    --secondary: #5C4033;
-    --accent: #D2B48C;
-    --light: #F5F5F5;
-    --dark: #333;
-}
-
-* { box-sizing: border-box; margin:0; padding:0; }
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--light);
-    color: var(--dark);
-}
-
-/* Banner */
-.banner {
-    background: var(--secondary);
-    color: white;
-    text-align: center;
-    padding: 0.6rem;
-    font-size: 0.9rem;
-}
-
-/* Nav */
-nav {
-    background: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.logo img { width: 160px; max-width: 100%; height: auto; }
-
-.nav-links { display: flex; gap: 1.5rem; list-style: none; }
-.nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; cursor: pointer; }
-.nav-links a:hover { color: var(--primary); }
-
-.nav-actions { display: flex; gap: 1rem; align-items: center; position: relative; }
-.btn { border: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; transition: all 0.3s; }
-.login { background: var(--secondary); color: white; }
-.login:hover { background: var(--primary); }
-.logout { background: transparent; border: 1px solid var(--secondary); }
-
-/* Cart & Search */
-.search-bar { padding:0.4rem; border-radius:4px; border:1px solid #ccc; width: 200px; }
-.cart-icon { 
-    font-size:1.4rem; 
-    cursor:pointer; 
-    color: var(--secondary); 
-    position: relative;
-}
-.cart-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: bold;
-}
-
-/* Hero */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4rem 2rem;
-    min-height: 75vh;
-    background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
-        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
-    background-size: cover;
-}
-
-.hero-content { max-width: 520px; }
-.hero h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing:1px; font-size: 3rem; margin-bottom: 1rem; }
-.hero p { font-size: 1rem; margin-bottom: 1.5rem; }
-.cta { background: var(--secondary); color: white; padding: 0.9rem 1.5rem; border-radius:5px; cursor:pointer; border: none; }
-.cta:hover { background: var(--primary); }
-
-.trust {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-}
-.trust div {
-    background: var(--accent);
-    padding: 0.6rem 0.9rem;
-    border-radius:6px;
-    font-size:0.85rem;
-    font-weight:500;
-    color: var(--secondary);
-}
-
-/* Page Container */
-.page {
-    display: none;
-    min-height: 60vh;
-}
-.page.active {
-    display: block;
-}
-
-/* Products Section */
-.products-section {
-    padding: 3rem 2rem;
-}
-.products-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-}
-
-.filter-bar {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-.filter-btn {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--primary);
-    background: white;
-    color: var(--primary);
-    border-radius: 4px;
-    cursor: pointer;
-}
-.filter-btn.active {
-    background: var(--primary);
-    color: white;
-}
-
-.products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-    gap: 2rem;
-    padding: 0 2rem;
-}
-.product-card {
-    background:white;
-    border-radius:10px;
-    padding:1rem;
-    text-align:center;
-    box-shadow:0 5px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s;
-}
-.product-card:hover {
-    transform: translateY(-5px);
-}
-.product-card img { width:100%; height: 200px; object-fit: cover; border-radius:8px; margin-bottom:0.5rem; cursor: pointer; }
-.product-card h3 { font-size:1.1rem; margin-bottom:0.3rem; cursor: pointer; }
-.product-card h3:hover { color: var(--primary); }
-.product-card .price { color: var(--primary); font-weight:600; margin-bottom:0.5rem; font-size: 1.2rem; }
-.product-card .description { font-size: 0.85rem; color: #666; margin-bottom: 0.8rem; }
-.product-card button { background: var(--secondary); color:white; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer; border: none; width: 100%; }
-.product-card button:hover { background: var(--primary); }
-
-/* Product Detail */
-.product-detail {
-    display: flex;
-    gap: 3rem;
-    padding: 3rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    align-items: flex-start;
-}
-.product-detail img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-.product-info {
-    flex: 1;
-}
-.product-info h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-.product-info .price {
-    font-size: 2rem;
-    color: var(--primary);
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-.product-info .description {
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    color: #666;
-}
-.quantity-selector {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-.quantity-selector button {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--primary);
-    background: white;
-    color: var(--primary);
-    cursor: pointer;
-    font-size: 1.2rem;
-    border-radius: 4px;
-}
-.quantity-selector input {
-    width: 60px;
-    text-align: center;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Cart Page */
-.cart-container {
-    padding: 3rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-.cart-container h1 {
-    margin-bottom: 2rem;
-}
-.cart-items {
-    background: white;
-    border-radius: 10px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-}
-.cart-item {
-    display: flex;
-    gap: 2rem;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid #eee;
-    align-items: center;
-}
-.cart-item:last-child {
-    border-bottom: none;
-}
-.cart-item img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-.cart-item-info {
-    flex: 1;
-}
-.cart-item-info h3 {
-    margin-bottom: 0.5rem;
-}
-.cart-item-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-.cart-item-controls button {
-    padding: 0.3rem 0.8rem;
-    border: 1px solid var(--primary);
-    background: white;
-    color: var(--primary);
-    cursor: pointer;
-    border-radius: 4px;
-}
-.remove-btn {
-    background: #dc3545 !important;
-    color: white !important;
-    border: none !important;
-    padding: 0.5rem 1rem !important;
-}
-.cart-summary {
-    background: white;
-    border-radius: 10px;
-    padding: 2rem;
-    max-width: 400px;
-    margin-left: auto;
-}
-.cart-summary h2 {
-    margin-bottom: 1rem;
-}
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.8rem;
-    padding: 0.5rem 0;
-}
-.summary-row.total {
-    border-top: 2px solid var(--primary);
-    font-weight: bold;
-    font-size: 1.3rem;
-    padding-top: 1rem;
-    margin-top: 1rem;
-}
-.empty-cart {
-    text-align: center;
-    padding: 4rem 2rem;
-}
-.empty-cart h2 {
-    margin-bottom: 1rem;
-}
-
-/* Checkout */
-.checkout-container {
-    padding: 3rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 3rem;
-}
-.checkout-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-}
-.checkout-form h2 {
-    margin-bottom: 1.5rem;
-}
-.form-group {
-    margin-bottom: 1.5rem;
-}
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: 'Poppins', sans-serif;
-}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-}
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-.order-summary {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    height: fit-content;
-}
-.order-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #eee;
-}
-
-/* Special Deals */
-.special-deals {
-    background: var(--primary);
-    color:white;
-    padding: 2rem;
-    text-align:center;
-}
-.special-deals h2 { margin-bottom:1rem; }
-.countdown { font-weight:bold; font-size:1.2rem; }
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-.modal.active {
-    display: flex;
-}
-.modal-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-.modal-content h2 {
-    margin-bottom: 1.5rem;
-}
-.close-modal {
-    float: right;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #666;
-}
-
-/* Success Message */
-.success-message {
-    text-align: center;
-    padding: 2rem;
-}
-.success-message .icon {
-    font-size: 4rem;
-    color: #28a745;
-    margin-bottom: 1rem;
-}
-
-/* Footer */
-footer {
-    background: var(--dark);
-    color: white;
-    padding: 3rem 2rem 1rem;
-}
-footer .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-footer .footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-footer h3 {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    color: var(--accent);
-}
-footer .footer-section p {
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-footer .footer-links-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-footer a { 
-    color: white; 
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s;
-}
-footer a:hover { 
-    color: var(--accent);
-}
-footer .social-icons {
-    display: flex;
-    gap: 0.8rem;
-    margin-top: 1rem;
-}
-footer .social-icons a {
-    font-size: 1.5rem;
-}
-footer .newsletter-form {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-footer input[type=email] { 
-    flex: 1;
-    padding: 0.6rem; 
-    border-radius: 4px; 
-    border: none;
-    font-family: 'Poppins', sans-serif;
-}
-footer button { 
-    padding: 0.6rem 1.2rem; 
-    border: none; 
-    border-radius: 4px; 
-    background: var(--secondary); 
-    color: white; 
-    cursor: pointer;
-    font-weight: 500;
-    transition: background 0.3s;
-}
-footer button:hover { 
-    background: var(--primary);
-}
-footer .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.2);
-    padding-top: 1rem;
-    text-align: center;
-    font-size: 0.85rem;
-}
-
-.hero img { max-width:400px; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,0.15); }
-
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-}
-.hamburger span {
-    width: 25px;
-    height: 3px;
-    background: var(--dark);
-    margin: 3px 0;
-    transition: 0.3s;
-}
-
-@media (max-width: 768px){
-    .hero { flex-direction: column; text-align:center; padding: 2rem 1rem; }
-    .hero h1 { font-size: 2rem; }
-    .hero img { max-width: 100%; margin-top: 2rem; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Hair Wigs & Extensions - Your premier destination for luxury hair wigs, extensions, and accessories. CIPC & VAT Registered. Based in Protea Glen, Soweto, Johannesburg.">
+    <meta name="keywords" content="hair wigs, hair extensions, luxury wigs, clip-in extensions, lace front wigs, South Africa, Soweto, Johannesburg">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <title>Premium Hair Wigs & Extensions - Luxury Hair Products | Soweto, Johannesburg</title>
     
-    .nav-links { 
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: white;
-        flex-direction: column;
-        padding: 1rem;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    }
-    .nav-links.active {
-        display: flex;
-    }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    .hamburger {
-        display: flex;
-    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .logo img { width:120px; }
-    
-    .products {
-        grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
-        gap: 1rem;
-        padding: 0 1rem;
-    }
-    
-    .product-detail {
-        flex-direction: column;
-        padding: 2rem 1rem;
-    }
-    
-    .checkout-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .search-bar {
-        width: 150px;
-    }
-    
-    footer .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    footer .newsletter-form {
-        flex-direction: column;
-    }
-}
-</style>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-<div class="banner">
-    Limited Time Offer! Get 20% Off All Hair Products
-</div>
-
-<nav>
-    <div class="logo">
-        <img src="logo.png" alt="Hair Bubbles Logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%2250%22><text x=%2210%22 y=%2235%22 font-size=%2224%22 fill=%22%238B4513%22 font-weight=%22bold%22 font-family=%22Arial%22>Hair Bubbles</text></svg>'">
+    <div class="banner">
+        🎉 Free Shipping on Orders Above R1,500 | 7-Day Return Policy | POPIA Compliant
     </div>
 
-    <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-
-    <ul class="nav-links" id="navLinks">
-        <li><a onclick="navigateTo('home')">Home</a></li>
-        <li><a onclick="navigateTo('shop')">Shop</a></li>
-        <li><a onclick="navigateTo('sale')">Sale</a></li>
-        <li><a onclick="navigateTo('contact')">Contact</a></li>
-    </ul>
-
-    <div class="nav-actions">
-        <input type="text" class="search-bar" id="searchBar" placeholder="Search products...">
-        <div class="cart-icon" onclick="navigateTo('cart')">
-            🛒
-            <span class="cart-badge" id="cartBadge">0</span>
+    <nav>
+        <div class="logo" onclick="navigateTo('home')">Premium Hair SA</div>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
+            <li><a href="#" onclick="navigateTo('shop'); return false;">Shop</a></li>
+            <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
+            <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+        </ul>
+        
+        <div class="search-bar">
+            <input type="text" id="searchBar" placeholder="Search products...">
         </div>
-        <div id="authArea"></div>
-    </div>
-</nav>
-
-<!-- HOME PAGE -->
-<div id="homePage" class="page active">
-    <section class="hero">
-        <div class="hero-content">
-            <p>Discover Your Perfect Look</p>
-            <h1>Premium Hair Wigs & Extensions</h1>
-            <p>Enhance your natural beauty with our exquisite collection of high-quality hair wigs and extensions.</p>
-            <button class="cta" onclick="navigateTo('shop')">SHOP NOW</button>
-
-            <div class="trust">
-                <div>🔒 Secure Checkout</div>
-                <div>🚚 Fast Delivery</div>
-                <div>✓ Quality Guarantee</div>
+        
+        <div class="nav-icons">
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-outline" onclick="openModal('loginModal')">Login</button>
+                <button class="btn btn-primary" onclick="openModal('registerModal')">Sign Up</button>
+            </div>
+            
+            <div class="user-info" id="userInfo">
+                <span id="userName">User</span>
+                <div class="user-menu">
+                    <i class="fas fa-user icon-btn"></i>
+                    <div class="user-dropdown">
+                        <a href="#" onclick="navigateTo('orders'); return false;">My Orders</a>
+                        <a href="#" onclick="navigateTo('wishlist'); return false;">Wishlist</a>
+                        <button onclick="handleLogout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="icon-btn" onclick="navigateTo('wishlist')">
+                <i class="fas fa-heart"></i>
+                <span class="badge" id="wishlistBadge">0</span>
+            </div>
+            
+            <div class="icon-btn" onclick="navigateTo('cart')">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge" id="cartBadge">0</span>
             </div>
         </div>
-
-        <img src="https://images.unsplash.com/photo-1547049985-c5c4893c3f71" alt="Model with Premium Hair Wig">
-    </section>
-
-    <section class="products-section">
-        <h2>Featured Products</h2>
-        <div class="products" id="featuredProducts"></div>
-    </section>
-
-    <section class="special-deals">
-        <h2>Limited-Time Offer!</h2>
-        <p>Get 20% off on selected items. Hurry, offer ends in <span class="countdown" id="countdown">24:00:00</span></p>
-    </section>
-</div>
-
-<!-- SHOP PAGE -->
-<div id="shopPage" class="page">
-    <section class="products-section">
-        <h2>All Products</h2>
         
-        <div class="filter-bar">
-            <button class="filter-btn active" onclick="filterProducts('all')">All</button>
-            <button class="filter-btn" onclick="filterProducts('wigs')">Wigs</button>
-            <button class="filter-btn" onclick="filterProducts('extensions')">Extensions</button>
-            <button class="filter-btn" onclick="filterProducts('accessories')">Accessories</button>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        
-        <div class="products" id="allProducts"></div>
-    </section>
-</div>
+    </nav>
 
-<!-- PRODUCT DETAIL PAGE -->
-<div id="productDetailPage" class="page">
-    <div class="product-detail" id="productDetailContent"></div>
-</div>
+    <div id="homePage" class="page active">
+        <section class="hero">
+            <h1>Transform Your Look with Premium Hair</h1>
+            <p>Discover our exclusive collection of luxury wigs and extensions</p>
+            <button class="btn btn-primary" onclick="navigateTo('shop')">Shop Now</button>
+        </section>
 
-<!-- CART PAGE -->
-<div id="cartPage" class="page">
-    <div class="cart-container">
-        <h1>Shopping Cart</h1>
-        <div id="cartContent"></div>
+        <section class="deals-banner">
+            <p>Hurry! Sale ends in:</p>
+            <div class="countdown" id="countdown">23:59:59</div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h2 class="section-title">Featured Products</h2>
+                <div class="product-grid" id="featuredProducts">
+                </div>
+            </div>
+        </section>
+
+        <section class="about-features">
+            <div class="container">
+                <h2 class="section-title">Why Choose Us</h2>
+                <div class="about-features">
+                    <div class="feature-card">
+                        <h3>✅ Premium Quality</h3>
+                        <p>100% authentic human hair products</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🚚 Fast Delivery</h3>
+                        <p>2-5 business days delivery nationwide</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔄 Easy Returns</h3>
+                        <p>7-day hassle-free return policy</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔒 Secure Payment</h3>
+                        <p>PayFast integration for safe transactions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
 
-<!-- CHECKOUT PAGE -->
-<div id="checkoutPage" class="page">
-    <div class="checkout-container">
-        <div class="checkout-form">
-            <h2>Checkout</h2>
-            <form id="checkoutForm">
-                <h3>Shipping Information</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name *</label>
-                        <input type="text" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name *</label>
-                        <input type="text" name="lastName" required>
-                    </div>
+    <div id="shopPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Shop All Products</h2>
+                
+                <div class="filters">
+                    <button class="filter-btn active" data-category="all" onclick="filterProducts('all')">All</button>
+                    <button class="filter-btn" data-category="wigs" onclick="filterProducts('wigs')">Wigs</button>
+                    <button class="filter-btn" data-category="extensions" onclick="filterProducts('extensions')">Extensions</button>
+                    <button class="filter-btn" data-category="accessories" onclick="filterProducts('accessories')">Accessories</button>
                 </div>
                 
+                <div class="product-grid" id="allProducts">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="salePage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">🔥 Sale Items - Up to 20% OFF</h2>
+                <div class="deals-banner">
+                    <p>Limited time offers! Don't miss out!</p>
+                    <div class="countdown" id="saleCountdown">23:59:59</div>
+                </div>
+                <div class="product-grid" id="saleProducts">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="aboutPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">About Us</h2>
+                <div class="about-section">
+                    <h2>Welcome to Premium Hair Wigs & Extensions</h2>
+                    <p>
+                        Premium Hair Wigs & Extensions Pty (Ltd) is your premier destination for high-quality hair wigs, extensions, 
+                        and accessories. Based in the heart of Protea Glen, Soweto, Johannesburg, we pride ourselves on offering 
+                        authentic, luxurious hair products that help you look and feel your best.
+                    </p>
+                    
+                    <h2>Our Story</h2>
+                    <p>
+                        Founded with a passion for empowering individuals through beautiful hair, we have grown to become one of 
+                        Gauteng's most trusted providers of premium hair products. Our commitment to quality, customer satisfaction, 
+                        and authenticity sets us apart in the industry.
+                    </p>
+                    
+                    <h2>Our Commitment</h2>
+                    <p>
+                        We are CIPC and VAT registered, ensuring complete transparency and compliance with South African business 
+                        regulations. We are also POPIA compliant, safeguarding your personal information at every step.
+                    </p>
+                    
+                    <h2>Quality Assurance</h2>
+                    <p>
+                        All our products are made from 100% authentic human hair, sourced responsibly and crafted with care. 
+                        We offer a 7-day return policy and provide fast delivery within 2-5 business days across South Africa.
+                    </p>
+                    
+                    <h2>Customer First</h2>
+                    <p>
+                        Your satisfaction is our priority. We offer free shipping on orders above R1,500, secure PayFast payment 
+                        integration, and dedicated customer support to assist you at every stage of your shopping journey.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="productDetailPage" class="page">
+        <section>
+            <div class="container">
+                <div class="product-detail">
+                    <img id="productDetailImage" class="product-detail-image" src="" alt="Product">
+                    <div class="product-detail-info">
+                        <h1 id="productDetailName">Product Name</h1>
+                        <span class="category" id="productDetailCategory">Category</span>
+                        <p class="price" id="productDetailPrice">R0.00</p>
+                        <p class="description" id="productDetailDescription">Product description...</p>
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button class="btn btn-primary" onclick="addProductToCart()">Add to Cart</button>
+                            <button class="btn btn-secondary" onclick="addToWishlist(state.currentProduct.id)">Add to Wishlist</button>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-outline" onclick="navigateTo('shop')">← Back to Shop</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="cartPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Shopping Cart</h2>
+                <div class="checkout-container">
+                    <div>
+                        <div class="cart-items" id="cartItems">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cart-summary">
+                            <h3>Order Summary</h3>
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="cartSubtotal">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>VAT (15%):</span>
+                                <span id="cartVat">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping:</span>
+                                <span id="cartShipping">FREE</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="cartTotal">R0.00</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="navigateTo('checkout')">
+                                Proceed to Checkout
+                            </button>
+                            <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;" onclick="navigateTo('shop')">
+                                Continue Shopping
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="checkoutPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Checkout</h2>
+                <div class="checkout-container">
+                    <div class="checkout-form">
+                        <form id="checkoutForm">
+                            <h2>Shipping Information</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="checkoutName">Full Name *</label>
+                                    <input type="text" id="checkoutName" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkoutEmail">Email *</label>
+                                    <input type="email" id="checkoutEmail" name="email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutPhone">Phone Number *</label>
+                                <input type="tel" id="checkoutPhone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutAddress">Address *</label>
+                                <input type="text" id="checkoutAddress" name="address" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="checkoutCity">City *</label>
+                                    <input type="text" id="checkoutCity" name="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkoutProvince">Province *</label>
+                                    <select id="checkoutProvince" name="province" required>
+                                        <option value="">Select Province</option>
+                                        <option value="Gauteng">Gauteng</option>
+                                        <option value="Western Cape">Western Cape</option>
+                                        <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                                        <option value="Eastern Cape">Eastern Cape</option>
+                                        <option value="Limpopo">Limpopo</option>
+                                        <option value="Mpumalanga">Mpumalanga</option>
+                                        <option value="North West">North West</option>
+                                        <option value="Free State">Free State</option>
+                                        <option value="Northern Cape">Northern Cape</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutPostalCode">Postal Code *</label>
+                                <input type="text" id="checkoutPostalCode" name="postalCode" required>
+                            </div>
+                            
+                            <h2 style="margin-top: 2rem;">Payment Method</h2>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method *</label>
+                                <select id="paymentMethod" name="paymentMethod" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="payfast">PayFast</option>
+                                    <option value="credit-card">Credit Card</option>
+                                    <option value="debit-card">Debit Card</option>
+                                    <option value="eft">EFT</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+                                Place Order
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <div class="cart-summary">
+                            <h3>Order Summary</h3>
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="checkoutSubtotal">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>VAT (15%):</span>
+                                <span id="checkoutVat">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping:</span>
+                                <span id="checkoutShipping">FREE</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="checkoutTotal">R0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="ordersPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">My Orders</h2>
+                <div class="orders-list" id="ordersList">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="trackPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Track Your Order</h2>
+                <div class="tracking-form">
+                    <form id="trackOrderForm">
+                        <div class="form-group">
+                            <label for="trackOrderNumber">Order Number</label>
+                            <input type="text" id="trackOrderNumber" placeholder="Enter your order number" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Track Order</button>
+                    </form>
+                </div>
+                <div class="tracking-results" id="trackingResults">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="wishlistPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">My Wishlist</h2>
+                <div class="product-grid" id="wishlistItems">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="contactPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="contact-container">
+                    <div class="contact-form">
+                        <h2>Send Us a Message</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="contactName">Name *</label>
+                                <input type="text" id="contactName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email *</label>
+                                <input type="email" id="contactEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactSubject">Subject *</label>
+                                <input type="text" id="contactSubject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Message *</label>
+                                <textarea id="contactMessage" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                        </form>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h2>Get In Touch</h2>
+                        
+                        <div class="contact-info-item">
+                            <h3>📍 Address</h3>
+                            <p>123 Luxury Lane<br>Protea Glen, Soweto<br>Johannesburg, Gauteng<br>1818, South Africa</p>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3>📞 Phone</h3>
+                            <p>+27 71 555 1234</p>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3>✉️ Email</h3>
+                            <p>info@premiumhairsa.co.za<br>support@premiumhairsa.co.za</p>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3>🕒 Business Hours</h3>
+                            <p>Monday - Friday: 09:00 - 18:00<br>Saturday: 09:00 - 14:00<br>Sunday: Closed<br>Public Holidays: Closed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to Your Account</h2>
+            <form id="loginForm">
                 <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" name="email" required>
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
                 </div>
-                
                 <div class="form-group">
-                    <label>Phone *</label>
-                    <input type="tel" name="phone" required>
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
                 </div>
-                
-                <div class="form-group">
-                    <label>Address *</label>
-                    <input type="text" name="address" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>City *</label>
-                        <input type="text" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Postal Code *</label>
-                        <input type="text" name="postalCode" required>
-                    </div>
-                </div>
-                
-                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Payment Information</h3>
-                <div class="form-group">
-                    <label>Card Number *</label>
-                    <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Expiry Date *</label>
-                        <input type="text" name="expiry" placeholder="MM/YY" required>
-                    </div>
-                    <div class="form-group">
-                        <label>CVV *</label>
-                        <input type="text" name="cvv" placeholder="123" required>
-                    </div>
-                </div>
-                
-                <button type="submit" class="cta" style="width: 100%; margin-top: 1.5rem;">Place Order</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
             </form>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" onclick="switchModal('loginModal', 'registerModal'); return false;">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Create an Account</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#" onclick="switchModal('registerModal', 'loginModal'); return false;">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-modal" onclick="closeModal('successModal')">&times;</span>
+            <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">✓</div>
+            <p>Thank you for your order. You will receive a confirmation email shortly.</p>
+            <p style="margin-top: 1rem;">Redirecting to orders page...</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Premium Hair Wigs & Extensions</h3>
+                <p>Premium Hair Wigs & Extensions Pty (Ltd)</p>
+                <p>CIPC & VAT Registered</p>
+                <p>POPIA Compliant</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/premiumhairsa" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/premiumhairsa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/premiumhairsa" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27715551234" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" onclick="navigateTo('shop'); return false;">Shop All</a></li>
+                    <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
+                    <li><a href="#" onclick="navigateTo('track'); return false;">Track Order</a></li>
+                    <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
+                    <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📍 123 Luxury Lane, Protea Glen<br>Soweto, Johannesburg, Gauteng, 1818</p>
+                <p>📞 +27 71 555 1234</p>
+                <p>✉️ info@premiumhairsa.co.za</p>
+                <p><strong>Hours:</strong><br>Mon-Fri: 09:00-18:00<br>Sat: 09:00-14:00</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" id="newsletterEmail" placeholder="Your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
         </div>
         
-        <div class="order-summary" id="orderSummary"></div>
-    </div>
-</div>
-
-<!-- CONTACT PAGE -->
-<div id="contactPage" class="page">
-    <div class="checkout-container" style="grid-template-columns: 1fr;">
-        <div class="checkout-form">
-            <h2>Contact Us</h2>
-            <p style="margin-bottom: 2rem;">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
-            <form id="contactForm">
-                <div class="form-group">
-                    <label>Name *</label>
-                    <input type="text" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Subject *</label>
-                    <input type="text" name="subject" required>
-                </div>
-                <div class="form-group">
-                    <label>Message *</label>
-                    <textarea name="message" rows="6" required></textarea>
-                </div>
-                <button type="submit" class="cta" style="width: 100%;">Send Message</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- SALE PAGE -->
-<div id="salePage" class="page">
-    <section class="products-section">
-        <h2>Special Offers & Sales</h2>
-        <p style="text-align: center; margin-bottom: 2rem; color: var(--primary); font-size: 1.2rem;">Save up to 20% on selected items!</p>
-        <div class="products" id="saleProducts"></div>
-    </section>
-</div>
-
-<!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
-        <h2>Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit" class="cta" style="width: 100%;">Login</button>
-        </form>
-        <p style="margin-top: 1rem; text-align: center;">
-            Don't have an account? <a href="#" onclick="openModal('registerModal'); closeModal('loginModal');" style="color: var(--primary);">Register</a>
-        </p>
-    </div>
-</div>
-
-<!-- REGISTER MODAL -->
-<div class="modal" id="registerModal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
-        <h2>Register</h2>
-        <form id="registerForm">
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" required>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" name="confirmPassword" required>
-            </div>
-            <button type="submit" class="cta" style="width: 100%;">Register</button>
-        </form>
-        <p style="margin-top: 1rem; text-align: center;">
-            Already have an account? <a href="#" onclick="openModal('loginModal'); closeModal('registerModal');" style="color: var(--primary);">Login</a>
-        </p>
-    </div>
-</div>
-
-<!-- SUCCESS MODAL -->
-<div class="modal" id="successModal">
-    <div class="modal-content">
-        <div class="success-message">
-            <div class="icon">✓</div>
-            <h2>Order Placed Successfully!</h2>
-            <p>Thank you for your purchase. Your order number is <strong id="orderNumber"></strong></p>
-            <p>You will receive a confirmation email shortly.</p>
-            <button class="cta" onclick="closeModal('successModal'); navigateTo('home');" style="margin-top: 1.5rem;">Continue Shopping</button>
-        </div>
-    </div>
-</div>
-
-<footer>
-    <div class="footer-content">
-        <div class="footer-grid">
-            <!-- Get in touch -->
-            <div class="footer-section">
-                <h3>Get in touch</h3>
-                <p>📍 6 Taxi Street, Ferreira Bloemfontein<br>9301, South Africa</p>
-                <p>✉️ support@hairbubbles.co.za</p>
-                <div class="social-icons">
-                    <a href="https://facebook.com" target="_blank" title="Facebook">📘</a>
-                    <a href="https://twitter.com" target="_blank" title="Twitter">🐦</a>
-                    <a href="https://instagram.com" target="_blank" title="Instagram">📷</a>
-                    <a href="https://youtube.com" target="_blank" title="YouTube">📺</a>
-                    <a href="https://tiktok.com" target="_blank" title="TikTok">🎵</a>
-                </div>
-            </div>
-
-            <!-- Company & Policy -->
-            <div class="footer-section">
-                <h3>Company & Policy</h3>
-                <div class="footer-links-list">
-                    <a href="#" onclick="navigateTo('home'); return false;">Refund Policy</a>
-                    <a href="#" onclick="navigateTo('home'); return false;">Privacy Policy</a>
-                    <a href="#" onclick="navigateTo('home'); return false;">Terms of Service</a>
-                    <a href="#" onclick="navigateTo('home'); return false;">Shipping Policy</a>
-                    <a href="#" onclick="navigateTo('contact'); return false;">Contact Information</a>
-                </div>
-            </div>
-
-            <!-- Account -->
-            <div class="footer-section">
-                <h3>Account</h3>
-                <div class="footer-links-list">
-                    <a href="#" onclick="openModal('loginModal'); return false;">Sign In</a>
-                    <a href="#" onclick="openModal('registerModal'); return false;">Register</a>
-                    <a href="#" onclick="navigateTo('checkout'); return false;">Checkout</a>
-                    <a href="#" onclick="navigateTo('home'); return false;">Wishlist</a>
-                    <a href="#" onclick="navigateTo('home'); return false;">Track Order</a>
-                </div>
-            </div>
-
-            <!-- Shop Now -->
-            <div class="footer-section">
-                <h3>Shop Now</h3>
-                <div class="footer-links-list">
-                    <a href="#" onclick="navigateTo('shop'); return false;">Shop Best Sellers</a>
-                    <a href="#" onclick="navigateTo('shop'); return false;">Shop New Arrivals</a>
-                    <a href="#" onclick="navigateTo('sale'); return false;">Shop Promotions</a>
-                    <a href="#" onclick="navigateTo('shop'); return false;">Shop All Collections</a>
-                </div>
-            </div>
-
-            <!-- Newsletter Signup -->
-            <div class="footer-section">
-                <h3>Newsletter Signup</h3>
-                <p>Subscribe to our newsletter & marketing</p>
-                <div class="newsletter-form">
-                    <input type="email" placeholder="Your email address" id="newsletterEmail">
-                    <button onclick="subscribeNewsletter()">Subscribe</button>
-                </div>
-            </div>
-        </div>
-
         <div class="footer-bottom">
-            <p>© 2026 Hair Bubbles. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+            <p>&copy; 2024 Premium Hair Wigs & Extensions Pty (Ltd). All rights reserved. | CIPC Registered | VAT Registered | POPIA Compliant</p>
         </div>
-    </div>
-</footer>
+    </footer>
 
-<script>
-// Product Database
-const products = [
-    { id: 1, name: "Luxury Straight Wig", price: 1500, category: "wigs", image: "https://images.unsplash.com/photo-1600180758895-7f0a6b7f83e5", description: "Premium quality straight wig with natural look and comfortable fit. Made from 100% human hair." },
-    { id: 2, name: "Silk Extensions", price: 850, category: "extensions", image: "https://images.unsplash.com/photo-1616628189931-91c8aa62f5a2", description: "Luxurious silk extensions for added length and volume. Blend seamlessly with your natural hair." },
-    { id: 3, name: "Curly Bob Wig", price: 1200, category: "wigs", image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da", description: "Beautiful curly bob style wig. Perfect for a fresh, modern look." },
-    { id: 4, name: "Wave Extensions", price: 950, category: "extensions", image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e", description: "Gorgeous wavy extensions for a beachy, natural look." },
-    { id: 5, name: "Long Straight Wig", price: 1800, category: "wigs", image: "https://images.unsplash.com/photo-1562322140-8baeececf3df", description: "Extra long straight wig with natural movement. Premium quality construction." },
-    { id: 6, name: "Clip-In Extensions", price: 650, category: "extensions", image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15", description: "Easy-to-use clip-in extensions. Add volume and length in minutes." },
-    { id: 7, name: "Lace Front Wig", price: 2200, category: "wigs", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", description: "Premium lace front wig with realistic hairline. Natural-looking and breathable." },
-    { id: 8, name: "Tape-In Extensions", price: 1100, category: "extensions", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f", description: "Professional tape-in extensions. Long-lasting and comfortable." },
-    { id: 9, name: "Wig Cap", price: 120, category: "accessories", image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b", description: "Comfortable wig cap for secure fit. Breathable material." },
-    { id: 10, name: "Wig Stand", price: 180, category: "accessories", image: "https://images.unsplash.com/photo-1610652492300-baba14fff5b8", description: "Elegant wig stand for proper storage and display." },
-    { id: 11, name: "Wig Brush", price: 95, category: "accessories", image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da", description: "Specialized wig brush for gentle detangling." },
-    { id: 12, name: "Curly Afro Wig", price: 1350, category: "wigs", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04", description: "Beautiful natural curly afro wig. Voluminous and stylish." },
-];
-
-// App State
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let user = JSON.parse(localStorage.getItem('user')) || null;
-let currentFilter = 'all';
-let currentProduct = null;
-
-// Initialize App
-function init() {
-    renderAuth();
-    renderFeaturedProducts();
-    renderAllProducts();
-    renderSaleProducts();
-    updateCartBadge();
-    startCountdown();
-    
-    // Search functionality
-    document.getElementById('searchBar').addEventListener('input', (e) => {
-        searchProducts(e.target.value);
-    });
-    
-    // Hamburger menu
-    document.getElementById('hamburger').addEventListener('click', () => {
-        document.getElementById('navLinks').classList.toggle('active');
-    });
-    
-    // Contact form
-    document.getElementById('contactForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Thank you for contacting us! We will get back to you soon.');
-        e.target.reset();
-    });
-}
-
-// Navigation
-function navigateTo(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    
-    if (page === 'checkout' && !user) {
-        openModal('loginModal');
-        return;
-    }
-    
-    if (page === 'checkout' && cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-    }
-    
-    const pageMap = {
-        'home': 'homePage',
-        'shop': 'shopPage',
-        'cart': 'cartPage',
-        'checkout': 'checkoutPage',
-        'product': 'productDetailPage',
-        'contact': 'contactPage',
-        'sale': 'salePage'
-    };
-    
-    const pageId = pageMap[page];
-    if (pageId) {
-        document.getElementById(pageId).classList.add('active');
-        
-        if (page === 'cart') renderCart();
-        if (page === 'checkout') renderOrderSummary();
-        
-        window.scrollTo(0, 0);
-        document.getElementById('navLinks').classList.remove('active');
-    }
-}
-
-// Authentication
-function renderAuth() {
-    const authArea = document.getElementById('authArea');
-    if (user) {
-        authArea.innerHTML = `
-            <span style="color: var(--primary); font-weight: 500;">Hi, ${user.name}</span>
-            <button class="btn logout" onclick="logout()">Logout</button>
-        `;
-    } else {
-        authArea.innerHTML = `
-            <button class="btn login" onclick="openModal('loginModal')">Login</button>
-        `;
-    }
-}
-
-document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const email = formData.get('email');
-    
-    // Simulate login
-    user = { name: email.split('@')[0], email: email };
-    localStorage.setItem('user', JSON.stringify(user));
-    renderAuth();
-    closeModal('loginModal');
-    alert('Login successful!');
-});
-
-document.getElementById('registerForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const password = formData.get('password');
-    const confirmPassword = formData.get('confirmPassword');
-    
-    if (password !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-    }
-    
-    user = { name: formData.get('name'), email: formData.get('email') };
-    localStorage.setItem('user', JSON.stringify(user));
-    renderAuth();
-    closeModal('registerModal');
-    alert('Registration successful!');
-});
-
-function logout() {
-    user = null;
-    localStorage.removeItem('user');
-    renderAuth();
-    navigateTo('home');
-}
-
-// Product Rendering
-function renderFeaturedProducts() {
-    const container = document.getElementById('featuredProducts');
-    const featured = products.slice(0, 3);
-    container.innerHTML = featured.map(product => createProductCard(product)).join('');
-}
-
-function renderAllProducts() {
-    const container = document.getElementById('allProducts');
-    let filtered = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
-    container.innerHTML = filtered.map(product => createProductCard(product)).join('');
-}
-
-function renderSaleProducts() {
-    const container = document.getElementById('saleProducts');
-    const saleItems = products.slice(0, 6);
-    container.innerHTML = saleItems.map(product => createProductCard(product)).join('');
-}
-
-function createProductCard(product) {
-    return `
-        <div class="product-card">
-            <img src="${product.image}" alt="${product.name}" onclick="viewProduct(${product.id})">
-            <h3 onclick="viewProduct(${product.id})">${product.name}</h3>
-            <div class="price">R${product.price.toLocaleString()}</div>
-            <div class="description">${product.description.substring(0, 60)}...</div>
-            <button onclick="addToCart(${product.id})">Add to Cart</button>
-        </div>
-    `;
-}
-
-function filterProducts(category) {
-    currentFilter = category;
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    renderAllProducts();
-}
-
-function searchProducts(query) {
-    const container = document.getElementById('allProducts');
-    if (!query) {
-        renderAllProducts();
-        return;
-    }
-    
-    const filtered = products.filter(p => 
-        p.name.toLowerCase().includes(query.toLowerCase()) ||
-        p.description.toLowerCase().includes(query.toLowerCase())
-    );
-    
-    container.innerHTML = filtered.map(product => createProductCard(product)).join('');
-}
-
-function viewProduct(id) {
-    currentProduct = products.find(p => p.id === id);
-    const container = document.getElementById('productDetailContent');
-    
-    container.innerHTML = `
-        <img src="${currentProduct.image}" alt="${currentProduct.name}">
-        <div class="product-info">
-            <h1>${currentProduct.name}</h1>
-            <div class="price">R${currentProduct.price.toLocaleString()}</div>
-            <div class="description">${currentProduct.description}</div>
-            
-            <div class="quantity-selector">
-                <label>Quantity:</label>
-                <button onclick="updateQuantity(-1)">-</button>
-                <input type="number" id="productQuantity" value="1" min="1" max="10">
-                <button onclick="updateQuantity(1)">+</button>
-            </div>
-            
-            <button class="cta" onclick="addToCartWithQuantity()">Add to Cart</button>
-            <button class="btn" onclick="navigateTo('shop')" style="margin-left: 1rem;">Back to Shop</button>
-        </div>
-    `;
-    
-    navigateTo('product');
-}
-
-function updateQuantity(change) {
-    const input = document.getElementById('productQuantity');
-    let value = parseInt(input.value) + change;
-    if (value < 1) value = 1;
-    if (value > 10) value = 10;
-    input.value = value;
-}
-
-// Cart Functionality
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    const existingItem = cart.find(item => item.id === productId);
-    
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({ ...product, quantity: 1 });
-    }
-    
-    saveCart();
-    updateCartBadge();
-    alert(`${product.name} added to cart!`);
-}
-
-function addToCartWithQuantity() {
-    const quantity = parseInt(document.getElementById('productQuantity').value);
-    const existingItem = cart.find(item => item.id === currentProduct.id);
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({ ...currentProduct, quantity: quantity });
-    }
-    
-    saveCart();
-    updateCartBadge();
-    alert(`${currentProduct.name} added to cart!`);
-}
-
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    saveCart();
-    updateCartBadge();
-    renderCart();
-}
-
-function updateCartQuantity(productId, change) {
-    const item = cart.find(item => item.id === productId);
-    if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            saveCart();
-            renderCart();
-        }
-    }
-}
-
-function renderCart() {
-    const container = document.getElementById('cartContent');
-    
-    if (cart.length === 0) {
-        container.innerHTML = `
-            <div class="empty-cart">
-                <h2>Your cart is empty</h2>
-                <p>Add some products to your cart and they will appear here.</p>
-                <button class="cta" onclick="navigateTo('shop')">Start Shopping</button>
-            </div>
-        `;
-        return;
-    }
-    
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 100;
-    const total = subtotal + shipping;
-    
-    container.innerHTML = `
-        <div class="cart-items">
-            ${cart.map(item => `
-                <div class="cart-item">
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-info">
-                        <h3>${item.name}</h3>
-                        <div class="price">R${item.price.toLocaleString()}</div>
-                    </div>
-                    <div class="cart-item-controls">
-                        <button onclick="updateCartQuantity(${item.id}, -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button onclick="updateCartQuantity(${item.id}, 1)">+</button>
-                        <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
-                    </div>
-                </div>
-            `).join('')}
-        </div>
-        
-        <div class="cart-summary">
-            <h2>Order Summary</h2>
-            <div class="summary-row">
-                <span>Subtotal</span>
-                <span>R${subtotal.toLocaleString()}</span>
-            </div>
-            <div class="summary-row">
-                <span>Shipping</span>
-                <span>R${shipping}</span>
-            </div>
-            <div class="summary-row total">
-                <span>Total</span>
-                <span>R${total.toLocaleString()}</span>
-            </div>
-            <button class="cta" onclick="navigateTo('checkout')" style="width: 100%; margin-top: 1rem;">Proceed to Checkout</button>
-        </div>
-    `;
-}
-
-function renderOrderSummary() {
-    const container = document.getElementById('orderSummary');
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 100;
-    const total = subtotal + shipping;
-    
-    container.innerHTML = `
-        <h2>Order Summary</h2>
-        ${cart.map(item => `
-            <div class="order-item">
-                <span>${item.name} x${item.quantity}</span>
-                <span>R${(item.price * item.quantity).toLocaleString()}</span>
-            </div>
-        `).join('')}
-        <div class="summary-row">
-            <span>Subtotal</span>
-            <span>R${subtotal.toLocaleString()}</span>
-        </div>
-        <div class="summary-row">
-            <span>Shipping</span>
-            <span>R${shipping}</span>
-        </div>
-        <div class="summary-row total">
-            <span>Total</span>
-            <span>R${total.toLocaleString()}</span>
-        </div>
-    `;
-}
-
-function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-function updateCartBadge() {
-    const badge = document.getElementById('cartBadge');
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    badge.textContent = totalItems;
-}
-
-// Checkout
-document.getElementById('checkoutForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const orderNumber = 'HB' + Math.floor(Math.random() * 1000000);
-    document.getElementById('orderNumber').textContent = orderNumber;
-    
-    // Clear cart
-    cart = [];
-    saveCart();
-    updateCartBadge();
-    
-    openModal('successModal');
-});
-
-// Modal Functions
-function openModal(modalId) {
-    document.getElementById(modalId).classList.add('active');
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove('active');
-}
-
-// Newsletter
-function subscribeNewsletter() {
-    const email = document.getElementById('newsletterEmail').value;
-    if (email) {
-        alert('Thank you for subscribing to our newsletter!');
-        document.getElementById('newsletterEmail').value = '';
-    } else {
-        alert('Please enter your email address.');
-    }
-}
-
-// Countdown Timer
-function startCountdown() {
-    let hours = 23, minutes = 59, seconds = 59;
-    
-    setInterval(() => {
-        seconds--;
-        if (seconds < 0) {
-            seconds = 59;
-            minutes--;
-        }
-        if (minutes < 0) {
-            minutes = 59;
-            hours--;
-        }
-        if (hours < 0) {
-            hours = 23;
-        }
-        
-        document.getElementById('countdown').textContent = 
-            
-            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }, 1000);
-}
-
-// Initialize on page load
-init();
-</script>
-
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
