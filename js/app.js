@@ -109,8 +109,16 @@ function showErrorWithRetry(message, retryFunctionName) {
 }
 
 // ========== Initialization ==========
-function init() {
+async function init() {
     try {
+        console.log('🚀 Initializing Premium Hair SA E-commerce...');
+        
+        // Show page loader
+        const pageLoader = document.getElementById('pageLoader');
+        if (pageLoader) {
+            pageLoader.style.display = 'flex';
+        }
+        
         // Initialize API service
         apiService = new APIService({ API_CONFIG, APP_CONFIG, BUSINESS_INFO });
         
@@ -124,10 +132,21 @@ function init() {
         document.addEventListener('keypress', resetInactivityTimer);
         document.addEventListener('click', resetInactivityTimer);
         
-        // Load initial data
-        loadProducts();
+        // Check if user is logged in
+        if (localStorage.getItem('authToken')) {
+            console.log('User token found, loading user data...');
+            // await loadUserData(); // Commented out as this function doesn't exist in the code
+        }
+        
+        // Load products (with fallback)
+        console.log('Loading products...');
+        await loadProducts();
+        
+        // Verify products loaded
+        console.log('Products available:', state.products.length);
         
         // Setup event listeners
+        console.log('Setting up event listeners...');
         setupEventListeners();
         
         // Render initial UI
@@ -139,17 +158,40 @@ function init() {
         // Show home page by default
         navigateTo('home');
         
-        // Hide page loader after initialization
+        console.log('✅ Application initialized successfully!');
+        
+        // Hide page loader
         setTimeout(() => {
-            const pageLoader = document.getElementById('pageLoader');
             if (pageLoader) {
                 pageLoader.classList.add('hidden');
-                setTimeout(() => pageLoader.remove(), 500);
+                setTimeout(() => {
+                    pageLoader.style.display = 'none';
+                }, 500);
             }
-        }, 500);
+        }, 800);
         
-        console.log('App initialized successfully');
     } catch (error) {
+        console.error('❌ Initialization error:', error);
+        
+        // Ensure fallback products are loaded even on error
+        if (state.products.length === 0) {
+            console.log('Loading emergency fallback products...');
+            state.products = getFallbackProducts();
+            renderFeaturedProducts();
+            renderAllProducts();
+            renderSaleProducts();
+        }
+        
+        showNotification('App loaded with limited functionality. Some features may not work.', 'warning', 5000);
+        
+        // Hide loader anyway
+        const pageLoader = document.getElementById('pageLoader');
+        if (pageLoader) {
+            pageLoader.classList.add('hidden');
+            setTimeout(() => pageLoader.style.display = 'none', 500);
+        }
+    }
+}
         console.error('Initialization error:', error);
         showNotification('Failed to initialize app', 'error');
     }
@@ -232,22 +274,25 @@ function setupEventListeners() {
 // ========== Data Loading ==========
 async function loadProducts() {
     try {
+        console.log('Loading products from API...');
         state.isLoading = true;
-        const products = await apiService.getAllProducts();
-        state.products = products;
-        renderFeaturedProducts();
-        renderAllProducts();
-        renderSaleProducts();
+        const data = await apiService.getAllProducts();
+        state.products = data.products || [];
+        console.log('Products loaded from API:', state.products.length);
     } catch (error) {
-        console.error('Failed to load products:', error);
-        // Use fallback products if API fails
+        console.error('Error loading products from API:', error);
+        console.log('Using fallback products...');
+        // ALWAYS use fallback products if API fails
         state.products = getFallbackProducts();
-        renderFeaturedProducts();
-        renderAllProducts();
-        renderSaleProducts();
+        console.log('Fallback products loaded:', state.products.length);
     } finally {
         state.isLoading = false;
     }
+    
+    // ALWAYS render products after loading
+    renderFeaturedProducts();
+    renderAllProducts();
+    renderSaleProducts();
 }
 
 // ========== Navigation ==========
@@ -480,21 +525,26 @@ function renderSaleProducts() {
 }
 
 function createProductCard(product, showDiscount = false) {
-    const discount = showDiscount ? 20 : (product.discount || 0);
-    const originalPrice = product.price;
-    const discountedPrice = discount > 0 ? originalPrice * (1 - discount / 100) : originalPrice;
+    // Handle both snake_case (from DB) and camelCase (from fallback)
+    const imageUrl = product.image_url || product.imageUrl || product.image || 'https://via.placeholder.com/400x400?text=Product+Image';
+    const price = product.on_sale ? (product.sale_price || product.salePrice) : product.price;
+    const originalPrice = product.on_sale ? product.price : null;
     
     return `
         <div class="product-card">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
-            ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
-            <h3>${product.name}</h3>
-            <p class="price">
-                ${discount > 0 ? `<span class="original-price">${APP_CONFIG.currency}${originalPrice.toFixed(2)}</span>` : ''}
-                ${APP_CONFIG.currency}${discountedPrice.toFixed(2)}
-            </p>
-            <button class="btn btn-primary" onclick="viewProduct(${product.id})">View Details</button>
-            <button class="btn btn-secondary" onclick="addToCart(${product.id})">Add to Cart</button>
+            ${product.on_sale ? '<div class="sale-badge">SALE</div>' : ''}
+            <img src="${imageUrl}" 
+                 alt="${product.name}" 
+                 onclick="viewProduct(${product.id})" 
+                 loading="lazy"
+                 onerror="this.src='https://via.placeholder.com/400x400?text=Product+Image'">
+            <h3 onclick="viewProduct(${product.id})">${product.name}</h3>
+            <p class="description">${product.description}</p>
+            <div class="price">
+                ${originalPrice ? `<span style="text-decoration: line-through; color: #999; font-size: 0.9rem; margin-right: 0.5rem;">R${originalPrice.toFixed(2)}</span>` : ''}
+                R${parseFloat(price).toFixed(2)}
+            </div>
+            <button onclick="addToCart(${product.id})">Add to Cart</button>
         </div>
     `;
 }
@@ -1052,21 +1102,160 @@ function startCountdown() {
 
 // ========== Fallback Products Data ==========
 function getFallbackProducts() {
+    console.log('Using fallback product data...');
     return [
-        { id: 1, name: "Luxury Straight Wig", price: 1500, category: "wigs", image: "https://images.unsplash.com/photo-1600180758895-7f0a6b7f83e5?w=500", description: "Premium quality straight wig with natural look and comfortable fit. Made from 100% human hair.", onSale: false },
-        { id: 2, name: "Silk Extensions", price: 850, category: "extensions", image: "https://images.unsplash.com/photo-1616628188931-91c8aa62f5a2?w=500", description: "Luxurious silk extensions for added length and volume. Blend seamlessly with your natural hair.", onSale: true, discount: 15 },
-        { id: 3, name: "Curly Bob Wig", price: 1200, category: "wigs", image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=500", description: "Beautiful curly bob style wig. Perfect for a fresh, modern look.", onSale: false },
-        { id: 4, name: "Wave Extensions", price: 950, category: "extensions", image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500", description: "Gorgeous wavy extensions for a beachy, natural look.", onSale: true, discount: 20 },
-        { id: 5, name: "Long Straight Wig", price: 1800, category: "wigs", image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=500", description: "Extra long straight wig with natural movement. Premium quality construction.", onSale: false },
-        { id: 6, name: "Clip-In Extensions", price: 650, category: "extensions", image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=500", description: "Easy-to-use clip-in extensions. Add volume and length in minutes.", onSale: true, discount: 10 },
-        { id: 7, name: "Lace Front Wig", price: 2200, category: "wigs", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500", description: "Premium lace front wig with realistic hairline. Natural-looking and breathable.", onSale: false },
-        { id: 8, name: "Tape-In Extensions", price: 1100, category: "extensions", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500", description: "Professional tape-in extensions. Long-lasting and comfortable.", onSale: false },
-        { id: 9, name: "Wig Cap", price: 120, category: "accessories", image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500", description: "Comfortable wig cap for secure fit. Breathable material.", onSale: true, discount: 25 },
-        { id: 10, name: "Wig Stand", price: 180, category: "accessories", image: "https://images.unsplash.com/photo-1610652492300-baba14fff5b8?w=500", description: "Elegant wig stand for proper storage and display.", onSale: false },
-        { id: 11, name: "Wig Brush", price: 95, category: "accessories", image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=500", description: "Specialized wig brush for gentle detangling.", onSale: false },
-        { id: 12, name: "Curly Afro Wig", price: 1350, category: "wigs", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500", description: "Beautiful natural curly afro wig. Voluminous and stylish.", onSale: true, discount: 18 }
+        { 
+            id: 1, 
+            name: "Luxury Straight Wig", 
+            price: 1500.00, 
+            category: "wigs", 
+            image_url: "https://images.unsplash.com/photo-1600180758895-7f0a6b7f83e5?w=400&h=400&fit=crop", 
+            description: "Premium quality straight wig with natural look. 100% human hair. Perfect for everyday wear and special occasions.", 
+            featured: true, 
+            on_sale: false, 
+            stock_quantity: 15 
+        },
+        { 
+            id: 2, 
+            name: "Silk Extensions", 
+            price: 850.00, 
+            category: "extensions", 
+            image_url: "https://images.unsplash.com/photo-1616628188931-91c8aa62f5a2?w=400&h=400&fit=crop", 
+            description: "Luxurious silk extensions for added length and volume. Blends seamlessly with natural hair.", 
+            featured: true, 
+            on_sale: true, 
+            sale_price: 680.00, 
+            stock_quantity: 25 
+        },
+        { 
+            id: 3, 
+            name: "Curly Bob Wig", 
+            price: 1200.00, 
+            category: "wigs", 
+            image_url: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&h=400&fit=crop", 
+            description: "Beautiful curly bob style wig. Perfect for a fresh, playful look. Easy to maintain and style.", 
+            featured: true, 
+            on_sale: false, 
+            stock_quantity: 10 
+        },
+        { 
+            id: 4, 
+            name: "Wave Extensions", 
+            price: 950.00, 
+            category: "extensions", 
+            image_url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400&h=400&fit=crop", 
+            description: "Gorgeous wavy extensions for a beachy, natural appearance. Premium quality hair that lasts.", 
+            featured: false, 
+            on_sale: true, 
+            sale_price: 760.00, 
+            stock_quantity: 20 
+        },
+        { 
+            id: 5, 
+            name: "Long Straight Wig", 
+            price: 1800.00, 
+            category: "wigs", 
+            image_url: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=400&fit=crop", 
+            description: "Extra long straight wig with natural movement. Premium quality human hair for elegant looks.", 
+            featured: true, 
+            on_sale: false, 
+            stock_quantity: 8 
+        },
+        { 
+            id: 6, 
+            name: "Clip-In Extensions", 
+            price: 650.00, 
+            category: "extensions", 
+            image_url: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=400&fit=crop", 
+            description: "Easy-to-use clip-in extensions. Add volume and length instantly. Perfect for beginners.", 
+            featured: false, 
+            on_sale: false, 
+            stock_quantity: 30 
+        },
+        { 
+            id: 7, 
+            name: "Lace Front Wig", 
+            price: 2200.00, 
+            category: "wigs", 
+            image_url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop", 
+            description: "Premium lace front wig with realistic hairline. Natural parting. Celebrity quality styling.", 
+            featured: true, 
+            on_sale: false, 
+            stock_quantity: 12 
+        },
+        { 
+            id: 8, 
+            name: "Tape-In Extensions", 
+            price: 1100.00, 
+            category: "extensions", 
+            image_url: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop", 
+            description: "Professional tape-in extensions. Long-lasting, seamless, and comfortable. Salon quality results.", 
+            featured: false, 
+            on_sale: false, 
+            stock_quantity: 18 
+        },
+        { 
+            id: 9, 
+            name: "Hair Care Shampoo", 
+            price: 250.00, 
+            category: "accessories", 
+            image_url: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=400&fit=crop", 
+            description: "Premium sulfate-free shampoo specially formulated for wigs and extensions. Gentle yet effective.", 
+            featured: false, 
+            on_sale: true, 
+            sale_price: 200.00, 
+            stock_quantity: 50 
+        },
+        { 
+            id: 10, 
+            name: "Hair Serum", 
+            price: 180.00, 
+            category: "accessories", 
+            image_url: "https://images.unsplash.com/photo-1610652492300-baba14fff5b8?w=400&h=400&fit=crop", 
+            description: "Nourishing hair serum for ultimate shine and heat protection. Suitable for all hair types.", 
+            featured: false, 
+            on_sale: false, 
+            stock_quantity: 40 
+        },
+        { 
+            id: 11, 
+            name: "Wig Brush", 
+            price: 95.00, 
+            category: "accessories", 
+            image_url: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop", 
+            description: "Specialized wig brush with soft bristles for gentle detangling. Essential for wig care.", 
+            featured: false, 
+            on_sale: false, 
+            stock_quantity: 60 
+        },
+        { 
+            id: 12, 
+            name: "Curly Afro Wig", 
+            price: 1350.00, 
+            category: "wigs", 
+            image_url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop", 
+            description: "Beautiful natural curly afro wig. Voluminous, stylish, and full of life. Embrace your natural beauty.", 
+            featured: true, 
+            on_sale: true, 
+            sale_price: 1080.00, 
+            stock_quantity: 14 
+        }
     ];
 }
+
+// ========== Debug Helper - Remove in production ==========
+window.debugApp = function() {
+    console.log('=== APP DEBUG INFO ===');
+    console.log('Products loaded:', state.products.length);
+    console.log('Cart items:', state.cart.length);
+    console.log('User logged in:', !!state.user);
+    console.log('Current page:', state.currentPage);
+    console.log('Products:', state.products);
+    console.log('=====================');
+};
+
+// Test products loading
+console.log('Products available on page load:', state.products.length);
 
 // ========== Initialize App on Page Load ==========
 if (document.readyState === 'loading') {

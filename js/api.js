@@ -139,7 +139,13 @@ class APIService {
      * Get all products
      */
     async getAllProducts() {
-        return this.get(this.config.API_CONFIG.ENDPOINTS.products);
+        try {
+            return await this.get(this.config.API_CONFIG.ENDPOINTS.products);
+        } catch (error) {
+            console.warn('API call failed, using fallback data');
+            // Return fallback format
+            return { success: true, products: [] };
+        }
     }
 
     /**

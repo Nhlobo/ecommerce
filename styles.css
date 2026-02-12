@@ -132,9 +132,30 @@ nav {
     z-index: 100;
 }
 
+/* ===== LOGO STYLES ===== */
 .logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
+.logo-image:hover {
+    transform: scale(1.05);
+}
+
+.logo-fallback {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
     font-size: 1.5rem;
-    font-weight: bold;
     color: var(--primary);
     font-family: var(--font-heading);
 }
@@ -1085,6 +1106,16 @@ footer {
         max-width: 200px;
     }
     
+    /* Responsive Logo */
+    .logo-image {
+        height: 40px;
+        max-width: 140px;
+    }
+    
+    .logo-fallback {
+        font-size: 1.2rem;
+    }
+    
     /* Hero */
     .hero h1 {
         font-size: 2rem;
@@ -1151,6 +1182,12 @@ footer {
     
     .hero h1 {
         font-size: 1.5rem;
+    }
+    
+    /* Responsive Logo */
+    .logo-image {
+        height: 35px;
+        max-width: 120px;
     }
     
     /* Product Grid */
