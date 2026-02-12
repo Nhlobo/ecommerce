@@ -292,6 +292,10 @@ async function loadProducts() {
         state.isLoading = false;
     }
     
+    // Apply sale logic based on date and stock
+    state.products = applySaleLogic(state.products);
+    console.log('Sale logic applied. Is sale day:', isSaleDay());
+    
     // ALWAYS render products after loading
     renderFeaturedProducts();
     renderAllProducts();
@@ -532,10 +536,13 @@ function createProductCard(product, showDiscount = false) {
     const imageUrl = product.image_url || product.imageUrl || product.image || 'https://via.placeholder.com/400x400?text=Product+Image';
     const price = product.on_sale ? (product.sale_price || product.salePrice) : product.price;
     const originalPrice = product.on_sale ? product.price : null;
+    const inStock = isInStock(product);
+    const stockQty = product.stock_quantity || 0;
     
     return `
-        <div class="product-card">
-            ${product.on_sale ? '<div class="sale-badge">SALE</div>' : ''}
+        <div class="product-card ${!inStock ? 'out-of-stock' : ''}">
+            ${!inStock ? '<div class="out-of-stock-badge">OUT OF STOCK</div>' : ''}
+            ${product.on_sale && inStock ? '<div class="sale-badge">SALE</div>' : ''}
             <img src="${imageUrl}" 
                  alt="${product.name}" 
                  onclick="viewProduct(${product.id})" 
@@ -547,7 +554,12 @@ function createProductCard(product, showDiscount = false) {
                 ${originalPrice ? `<span class="original-price">R${originalPrice.toFixed(2)}</span>` : ''}
                 R${parseFloat(price).toFixed(2)}
             </div>
-            <button onclick="addToCart(${product.id})">Add to Cart</button>
+            <div class="stock-info">
+                ${inStock ? `<span class="stock-available">In Stock: ${stockQty} available</span>` : '<span class="stock-unavailable">Out of Stock</span>'}
+            </div>
+            <button onclick="addToCart(${product.id})" ${!inStock ? 'disabled' : ''}>
+                ${inStock ? 'Add to Cart' : 'Out of Stock'}
+            </button>
         </div>
     `;
 }
@@ -601,16 +613,33 @@ function addToCart(productId) {
     const product = state.products.find(p => p.id === productId);
     if (!product) return;
     
+    // Check if product is in stock
+    if (!isInStock(product)) {
+        showNotification('Sorry, this item is out of stock', 'error');
+        return;
+    }
+    
     const existingItem = state.cart.find(item => item.id === productId);
     
     if (existingItem) {
+        // Check if we have enough stock
+        if (product.stock_quantity < existingItem.quantity + 1) {
+            showNotification('Not enough stock available', 'error');
+            return;
+        }
         existingItem.quantity += 1;
     } else {
         state.cart.push({ ...product, quantity: 1 });
     }
     
+    // Decrease stock
+    decreaseStock(productId, 1);
+    
     saveCart();
     updateCartBadge();
+    renderAllProducts(); // Re-render to update stock display
+    renderFeaturedProducts();
+    renderSaleProducts();
     showNotification(`${product.name} added to cart`, 'success');
 }
 
@@ -1103,6 +1132,78 @@ function startCountdown() {
     }, 1000);
 }
 
+// ========== Sale Date Management ==========
+/**
+ * Check if today is a sale day (15th, 25th, or 30th/31st of the month)
+ */
+function isSaleDay() {
+    const today = new Date();
+    const day = today.getDate();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    
+    // Sale days: 15th, 25th, and last day of month (30th or 31st)
+    return day === 15 || day === 25 || day === lastDayOfMonth;
+}
+
+/**
+ * Apply sale logic to products based on date and stock
+ * Items with higher stock (less popular) go on sale
+ */
+function applySaleLogic(products) {
+    if (!isSaleDay()) {
+        // Not a sale day, remove all sales
+        return products.map(p => ({
+            ...p,
+            on_sale: false,
+            sale_price: undefined
+        }));
+    }
+    
+    // It's a sale day - put low-selling items (high stock) on sale
+    // Calculate average stock
+    const avgStock = products.reduce((sum, p) => sum + (p.stock_quantity || 0), 0) / products.length;
+    
+    return products.map(product => {
+        // Items with stock above average are considered low-selling
+        const isLowSelling = (product.stock_quantity || 0) > avgStock;
+        
+        if (isLowSelling && product.stock_quantity > 0) {
+            return {
+                ...product,
+                on_sale: true,
+                sale_price: product.price * 0.80 // 20% discount
+            };
+        }
+        
+        return {
+            ...product,
+            on_sale: false,
+            sale_price: undefined
+        };
+    });
+}
+
+/**
+ * Check if product is in stock
+ */
+function isInStock(product) {
+    return (product.stock_quantity || 0) > 0;
+}
+
+/**
+ * Decrease stock when item is added to cart
+ */
+function decreaseStock(productId, quantity = 1) {
+    const product = state.products.find(p => p.id === productId);
+    if (product && product.stock_quantity > 0) {
+        product.stock_quantity = Math.max(0, product.stock_quantity - quantity);
+        // Save to localStorage
+        localStorage.setItem('products', JSON.stringify(state.products));
+        return true;
+    }
+    return false;
+}
+
 // ========== Fallback Products Data ==========
 function getFallbackProducts() {
     console.log('Using fallback product data...');
@@ -1116,7 +1217,7 @@ function getFallbackProducts() {
             description: "Premium quality straight wig with natural look. 100% human hair. Perfect for everyday wear and special occasions.", 
             featured: true, 
             on_sale: false, 
-            stock_quantity: 15 
+            stock_quantity: 5  // Low stock - popular item
         },
         { 
             id: 2, 
@@ -1126,9 +1227,8 @@ function getFallbackProducts() {
             image_url: "https://images.unsplash.com/photo-1616628188931-91c8aa62f5a2?w=400&h=400&fit=crop", 
             description: "Luxurious silk extensions for added length and volume. Blends seamlessly with natural hair.", 
             featured: true, 
-            on_sale: true, 
-            sale_price: 680.00, 
-            stock_quantity: 25 
+            on_sale: false, 
+            stock_quantity: 45  // High stock - less popular, will go on sale
         },
         { 
             id: 3, 
@@ -1139,7 +1239,7 @@ function getFallbackProducts() {
             description: "Beautiful curly bob style wig. Perfect for a fresh, playful look. Easy to maintain and style.", 
             featured: true, 
             on_sale: false, 
-            stock_quantity: 10 
+            stock_quantity: 3  // Very low stock - popular
         },
         { 
             id: 4, 
@@ -1149,9 +1249,8 @@ function getFallbackProducts() {
             image_url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400&h=400&fit=crop", 
             description: "Gorgeous wavy extensions for a beachy, natural appearance. Premium quality hair that lasts.", 
             featured: false, 
-            on_sale: true, 
-            sale_price: 760.00, 
-            stock_quantity: 20 
+            on_sale: false, 
+            stock_quantity: 35  // High stock - will go on sale
         },
         { 
             id: 5, 
@@ -1162,7 +1261,7 @@ function getFallbackProducts() {
             description: "Extra long straight wig with natural movement. Premium quality human hair for elegant looks.", 
             featured: true, 
             on_sale: false, 
-            stock_quantity: 8 
+            stock_quantity: 2  // Very low stock - very popular
         },
         { 
             id: 6, 
@@ -1173,7 +1272,7 @@ function getFallbackProducts() {
             description: "Easy-to-use clip-in extensions. Add volume and length instantly. Perfect for beginners.", 
             featured: false, 
             on_sale: false, 
-            stock_quantity: 30 
+            stock_quantity: 50  // Very high stock - not selling well, will go on sale
         },
         { 
             id: 7, 
@@ -1184,7 +1283,7 @@ function getFallbackProducts() {
             description: "Premium lace front wig with realistic hairline. Natural parting. Celebrity quality styling.", 
             featured: true, 
             on_sale: false, 
-            stock_quantity: 12 
+            stock_quantity: 8  // Medium-low stock
         },
         { 
             id: 8, 
@@ -1195,7 +1294,7 @@ function getFallbackProducts() {
             description: "Professional tape-in extensions. Long-lasting, seamless, and comfortable. Salon quality results.", 
             featured: false, 
             on_sale: false, 
-            stock_quantity: 18 
+            stock_quantity: 28  // High stock - will go on sale
         },
         { 
             id: 9, 
@@ -1205,9 +1304,8 @@ function getFallbackProducts() {
             image_url: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=400&fit=crop", 
             description: "Premium sulfate-free shampoo specially formulated for wigs and extensions. Gentle yet effective.", 
             featured: false, 
-            on_sale: true, 
-            sale_price: 200.00, 
-            stock_quantity: 50 
+            on_sale: false, 
+            stock_quantity: 60  // Very high stock - will go on sale
         },
         { 
             id: 10, 
@@ -1218,7 +1316,7 @@ function getFallbackProducts() {
             description: "Nourishing hair serum for ultimate shine and heat protection. Suitable for all hair types.", 
             featured: false, 
             on_sale: false, 
-            stock_quantity: 40 
+            stock_quantity: 40  // High stock - will go on sale
         },
         { 
             id: 11, 
@@ -1229,7 +1327,7 @@ function getFallbackProducts() {
             description: "Specialized wig brush with soft bristles for gentle detangling. Essential for wig care.", 
             featured: false, 
             on_sale: false, 
-            stock_quantity: 60 
+            stock_quantity: 0  // Out of stock
         },
         { 
             id: 12, 
@@ -1239,9 +1337,8 @@ function getFallbackProducts() {
             image_url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop", 
             description: "Beautiful natural curly afro wig. Voluminous, stylish, and full of life. Embrace your natural beauty.", 
             featured: true, 
-            on_sale: true, 
-            sale_price: 1080.00, 
-            stock_quantity: 14 
+            on_sale: false, 
+            stock_quantity: 6  // Low stock - popular
         }
     ];
 }
