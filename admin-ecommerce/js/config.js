@@ -16,11 +16,11 @@ const ADMIN_CONFIG = {
     ENDPOINTS: {
         login: '/api/admin/login',
         logout: '/api/admin/logout',
-        verify: '/api/admin/verify',
+        me: '/api/admin/me',
+        changePassword: '/api/admin/change-password',
         
         // Dashboard
-        dashboard: '/api/admin/dashboard',
-        metrics: '/api/admin/metrics',
+        dashboardOverview: '/api/admin/dashboard/overview',
         
         // Orders
         orders: '/api/admin/orders',
@@ -46,18 +46,20 @@ const ADMIN_CONFIG = {
         returns: '/api/admin/returns',
         returnById: (id) => `/api/admin/returns/${id}`,
         
+        // Refunds
+        refunds: '/api/admin/refunds',
+        
         // Reports
-        reports: '/api/admin/reports',
         salesReport: '/api/admin/reports/sales',
-        analytics: '/api/admin/reports/analytics',
+        productReport: '/api/admin/reports/products',
         
         // Compliance
         vatRecords: '/api/admin/compliance/vat',
-        activityLogs: '/api/admin/compliance/activity-logs',
+        policies: '/api/admin/compliance/policies',
         
-        // Security
-        securityEvents: '/api/admin/security/events',
-        securityLogs: '/api/admin/security/logs'
+        // Logs
+        activityLogs: '/api/admin/logs/activity',
+        securityEvents: '/api/admin/logs/security'
     },
     
     // Application Settings
