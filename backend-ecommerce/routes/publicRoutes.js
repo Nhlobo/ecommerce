@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { query } = require('../db/connection');
 const { validatePagination, validateProduct } = require('../middleware/validator');
 
@@ -603,7 +604,7 @@ router.post('/orders', async (req, res) => {
         const vat_amount = total_amount - (total_amount / (1 + vat_rate));
         
         // Generate order number
-        const orderNumber = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+        const orderNumber = 'ORD-' + Date.now() + '-' + crypto.randomBytes(5).toString('hex').toUpperCase();
         
         // Create order
         const orderResult = await query(

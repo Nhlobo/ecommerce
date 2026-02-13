@@ -9,6 +9,10 @@ const { query } = require('../db/connection');
 const { logActivity, logDataAccess } = require('../middleware/logger');
 const { validateUUID, validatePagination, validateProduct, validateOrderUpdate, validateDiscountCode } = require('../middleware/validator');
 
+// Allowed fields for dynamic update queries to prevent SQL field injection
+const ALLOWED_ORDER_FIELDS = ['status', 'payment_status', 'fulfillment_status', 'tracking_number', 'shipping_address', 'billing_address', 'notes'];
+const ALLOWED_PRODUCT_FIELDS = ['name', 'description', 'category', 'base_price', 'price_incl_vat', 'stock_quantity', 'sku', 'low_stock_threshold', 'is_active', 'is_featured', 'image_url'];
+
 // =====================================================
 // DASHBOARD OVERVIEW
 // =====================================================
@@ -104,10 +108,9 @@ router.get('/orders', validatePagination, async (req, res) => {
         }
         
         if (search) {
-            whereClause += ` AND (order_number ILIKE $${paramCount++} OR customer_name ILIKE $${paramCount++} OR customer_email ILIKE $${paramCount++})`;
-            const searchPattern = `%${search}%`;
-            params.push(searchPattern, searchPattern, searchPattern);
-            paramCount += 2;
+            whereClause += ` AND (order_number ILIKE $${paramCount} OR customer_name ILIKE $${paramCount} OR customer_email ILIKE $${paramCount})`;
+            params.push(`%${search}%`);
+            paramCount++;
         }
         
         const ordersQuery = `
@@ -203,9 +206,18 @@ router.put('/orders/:id', validateUUID('id'), validateOrderUpdate, logActivity('
         let paramCount = 1;
         
         Object.keys(updates).forEach(key => {
-            fields.push(`${key} = $${paramCount++}`);
-            values.push(updates[key]);
+            if (ALLOWED_ORDER_FIELDS.includes(key)) {
+                fields.push(`${key} = $${paramCount++}`);
+                values.push(updates[key]);
+            }
         });
+
+        if (fields.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No valid fields to update'
+            });
+        }
         
         fields.push(`updated_at = NOW()`);
         values.push(id);
@@ -308,9 +320,8 @@ router.get('/customers', validatePagination, logDataAccess('customer_list', 'vie
         let paramCount = 1;
         
         if (search) {
-            whereClause += ` AND (full_name ILIKE $${paramCount++} OR email ILIKE $${paramCount++})`;
-            const searchPattern = `%${search}%`;
-            params.push(searchPattern, searchPattern);
+            whereClause += ` AND (full_name ILIKE $${paramCount} OR email ILIKE $${paramCount})`;
+            params.push(`%${search}%`);
             paramCount++;
         }
         
@@ -408,9 +419,8 @@ router.get('/products', validatePagination, async (req, res) => {
         }
         
         if (search) {
-            whereClause += ` AND (name ILIKE $${paramCount++} OR sku ILIKE $${paramCount++})`;
-            const searchPattern = `%${search}%`;
-            params.push(searchPattern, searchPattern);
+            whereClause += ` AND (name ILIKE $${paramCount} OR sku ILIKE $${paramCount})`;
+            params.push(`%${search}%`);
             paramCount++;
         }
         
@@ -499,9 +509,18 @@ router.put('/products/:id', validateUUID('id'), logActivity('update_product', 'p
         let paramCount = 1;
         
         Object.keys(updates).forEach(key => {
-            fields.push(`${key} = $${paramCount++}`);
-            values.push(updates[key]);
+            if (ALLOWED_PRODUCT_FIELDS.includes(key)) {
+                fields.push(`${key} = $${paramCount++}`);
+                values.push(updates[key]);
+            }
         });
+
+        if (fields.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No valid fields to update'
+            });
+        }
         
         fields.push(`updated_at = NOW()`);
         values.push(id);
