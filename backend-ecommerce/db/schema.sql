@@ -429,6 +429,34 @@ CREATE TABLE IF NOT EXISTS product_performance (
 );
 
 -- =====================================================
+-- CONTACT & NEWSLETTER TABLES
+-- =====================================================
+
+-- Contact form submissions
+CREATE TABLE IF NOT EXISTS contact_submissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50),
+    subject VARCHAR(500),
+    message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending', -- pending, responded, resolved
+    responded_by UUID REFERENCES admin_users(id),
+    responded_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Newsletter subscribers
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255),
+    is_active BOOLEAN DEFAULT true,
+    subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    unsubscribed_at TIMESTAMP
+);
+
+-- =====================================================
 -- INDEXES FOR PERFORMANCE
 -- =====================================================
 
@@ -484,3 +512,10 @@ CREATE INDEX IF NOT EXISTS idx_security_events_resolved ON security_events(resol
 -- Analytics Indexes
 CREATE INDEX IF NOT EXISTS idx_sales_summary_date ON sales_summary(summary_date);
 CREATE INDEX IF NOT EXISTS idx_product_performance_product_id ON product_performance(product_id);
+
+-- Contact & Newsletter Indexes
+CREATE INDEX IF NOT EXISTS idx_contact_submissions_email ON contact_submissions(email);
+CREATE INDEX IF NOT EXISTS idx_contact_submissions_status ON contact_submissions(status);
+CREATE INDEX IF NOT EXISTS idx_contact_submissions_created_at ON contact_submissions(created_at);
+CREATE INDEX IF NOT EXISTS idx_newsletter_subscribers_email ON newsletter_subscribers(email);
+CREATE INDEX IF NOT EXISTS idx_newsletter_subscribers_is_active ON newsletter_subscribers(is_active);

@@ -20,6 +20,7 @@ const authController = require('./controllers/authController');
 
 // Import routes
 const adminRoutes = require('./routes/adminRoutes');
+const publicRoutes = require('./routes/publicRoutes');
 
 // Initialize Express app
 const app = express();
@@ -111,6 +112,9 @@ app.post('/api/admin/login', loginLimiter, checkLoginAttempts, validateLogin, au
 app.post('/api/admin/logout', authenticateAdmin, authController.logout);
 app.get('/api/admin/me', authenticateAdmin, authController.getCurrentAdmin);
 app.post('/api/admin/change-password', authenticateAdmin, authController.changePassword);
+
+// Public/Customer routes (non-authenticated)
+app.use('/api', publicRoutes);
 
 // Admin routes (protected)
 app.use('/api/admin', authenticateAdmin, adminRoutes);
