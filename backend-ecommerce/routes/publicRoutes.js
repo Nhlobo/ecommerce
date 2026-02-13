@@ -603,7 +603,7 @@ router.post('/orders', async (req, res) => {
         const vat_amount = total_amount - (total_amount / (1 + vat_rate));
         
         // Generate order number
-        const orderNumber = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        const orderNumber = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substring(2, 11).toUpperCase();
         
         // Create order
         const orderResult = await query(
