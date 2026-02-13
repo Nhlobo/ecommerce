@@ -4,11 +4,22 @@
  */
 
 // ========== Global State ==========
+function safeJsonParse(key, fallback) {
+    try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : fallback;
+    } catch (e) {
+        console.error(`Failed to parse ${key} from localStorage:`, e);
+        localStorage.removeItem(key);
+        return fallback;
+    }
+}
+
 let state = {
     products: [],
-    cart: JSON.parse(localStorage.getItem('cart')) || [],
-    user: JSON.parse(localStorage.getItem('user')) || null,
-    wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
+    cart: safeJsonParse('cart', []),
+    user: safeJsonParse('user', null),
+    wishlist: safeJsonParse('wishlist', []),
     currentPage: 'home',
     currentFilter: 'all',
     currentProduct: null,
@@ -106,6 +117,17 @@ function showErrorWithRetry(message, retryFunctionName) {
     }
     
     return container.innerHTML;
+}
+
+// ========== HTML Escaping ==========
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 // ========== Initialization ==========
@@ -312,7 +334,7 @@ function renderAuth() {
         // Show user info with dropdown
         authArea.innerHTML = `
             <div class="user-info" style="display: flex;">
-                <span id="userName">${state.user.name || state.user.email}</span>
+                <span id="userName">${escapeHtml(state.user.name || state.user.email)}</span>
                 <div class="user-menu">
                     <i class="fas fa-user icon-btn"></i>
                     <div class="user-dropdown">
@@ -497,9 +519,9 @@ function createProductCard(product, showDiscount = false) {
     
     return `
         <div class="product-card">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
             ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
-            <h3>${product.name}</h3>
+            <h3>${escapeHtml(product.name)}</h3>
             <p class="price">
                 ${discount > 0 ? `<span class="original-price">${APP_CONFIG.currency}${originalPrice.toFixed(2)}</span>` : ''}
                 ${APP_CONFIG.currency}${discountedPrice.toFixed(2)}
@@ -626,9 +648,9 @@ function renderCart() {
     // Render cart items
     container.innerHTML = state.cart.map(item => `
         <div class="cart-item">
-            <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/100x100?text=Product'">
+            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/100x100?text=Product'">
             <div class="cart-item-details">
-                <h3>${item.name}</h3>
+                <h3>${escapeHtml(item.name)}</h3>
                 <p class="price">${APP_CONFIG.currency}${item.price.toFixed(2)}</p>
             </div>
             <div class="cart-item-controls">
@@ -744,15 +766,15 @@ async function renderOrders() {
         container.innerHTML = orders.map(order => `
             <div class="order-card">
                 <div class="order-header">
-                    <h3>Order #${order.orderNumber}</h3>
-                    <span class="order-status ${order.status}">${order.status}</span>
+                    <h3>Order #${escapeHtml(order.orderNumber)}</h3>
+                    <span class="order-status ${escapeHtml(order.status)}">${escapeHtml(order.status)}</span>
                 </div>
                 <div class="order-details">
                     <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
                     <p><strong>Total:</strong> ${APP_CONFIG.currency}${order.total.toFixed(2)}</p>
                     <p><strong>Items:</strong> ${order.items.length}</p>
                 </div>
-                <button class="btn btn-secondary" onclick="viewOrder('${order.id}')">View Details</button>
+                <button class="btn btn-secondary" onclick="viewOrder('${escapeHtml(order.id)}')">View Details</button>
             </div>
         `).join('');
         
@@ -864,8 +886,8 @@ function renderWishlist() {
     
     container.innerHTML = state.wishlist.map(product => `
         <div class="product-card">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
-            <h3>${product.name}</h3>
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
+            <h3>${escapeHtml(product.name)}</h3>
             <p class="price">${APP_CONFIG.currency}${product.price.toFixed(2)}</p>
             <button class="btn btn-primary" onclick="viewProduct(${product.id})">View Details</button>
             <button class="btn btn-secondary" onclick="addToCart(${product.id})">Add to Cart</button>

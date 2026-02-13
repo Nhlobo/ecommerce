@@ -7,6 +7,19 @@ const API_BASE = ADMIN_CONFIG.API_BASE_URL;
 let adminToken = null;
 let adminInfo = null;
 
+/**
+ * Escape HTML to prevent XSS attacks
+ */
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // ================================
 // INITIALIZATION
 // ================================
@@ -21,8 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const storedAdminInfo = localStorage.getItem('adminInfo');
     if (storedAdminInfo) {
-        adminInfo = JSON.parse(storedAdminInfo);
-        document.getElementById('adminName').textContent = adminInfo.fullName || adminInfo.email;
+        try {
+            adminInfo = JSON.parse(storedAdminInfo);
+            document.getElementById('adminName').textContent = adminInfo.fullName || adminInfo.email;
+        } catch (e) {
+            console.error('Failed to parse admin info:', e);
+            localStorage.removeItem('adminInfo');
+        }
     }
     
     // Initialize dashboard
@@ -231,10 +249,10 @@ async function loadDashboardOverview() {
             if (overview.recentTransactions && overview.recentTransactions.length > 0) {
                 tbody.innerHTML = overview.recentTransactions.map(order => `
                     <tr>
-                        <td>${order.order_number}</td>
-                        <td>${order.customer_name}</td>
+                        <td>${escapeHtml(order.order_number)}</td>
+                        <td>${escapeHtml(order.customer_name)}</td>
                         <td>R${parseFloat(order.total_amount).toFixed(2)}</td>
-                        <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                        <td><span class="status-badge status-${escapeHtml(order.status)}">${escapeHtml(order.status)}</span></td>
                         <td>${new Date(order.placed_at).toLocaleDateString()}</td>
                     </tr>
                 `).join('');
@@ -253,8 +271,8 @@ async function loadOrders() {
         const search = document.getElementById('orderSearch')?.value || '';
         
         let endpoint = '/api/admin/orders?';
-        if (status) endpoint += `status=${status}&`;
-        if (search) endpoint += `search=${search}&`;
+        if (status) endpoint += `status=${encodeURIComponent(status)}&`;
+        if (search) endpoint += `search=${encodeURIComponent(search)}&`;
         
         const data = await apiRequest(endpoint);
         
@@ -263,15 +281,15 @@ async function loadOrders() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(order => `
                     <tr>
-                        <td>${order.order_number}</td>
-                        <td>${order.customer_name}</td>
-                        <td>${order.customer_email}</td>
+                        <td>${escapeHtml(order.order_number)}</td>
+                        <td>${escapeHtml(order.customer_name)}</td>
+                        <td>${escapeHtml(order.customer_email)}</td>
                         <td>R${parseFloat(order.total_amount).toFixed(2)}</td>
-                        <td><span class="status-badge status-${order.status}">${order.status}</span></td>
-                        <td><span class="status-badge status-${order.payment_status}">${order.payment_status}</span></td>
+                        <td><span class="status-badge status-${escapeHtml(order.status)}">${escapeHtml(order.status)}</span></td>
+                        <td><span class="status-badge status-${escapeHtml(order.payment_status)}">${escapeHtml(order.payment_status)}</span></td>
                         <td>${new Date(order.placed_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="viewOrder('${order.id}')">
+                            <button class="btn btn-sm btn-primary" onclick="viewOrder('${escapeHtml(order.id)}')">
                                 <i class="fas fa-eye"></i> View
                             </button>
                         </td>
@@ -290,7 +308,7 @@ async function loadPayments() {
     try {
         const status = document.getElementById('paymentStatusFilter')?.value || '';
         let endpoint = '/api/admin/payments?';
-        if (status) endpoint += `status=${status}`;
+        if (status) endpoint += `status=${encodeURIComponent(status)}`;
         
         const data = await apiRequest(endpoint);
         
@@ -299,12 +317,12 @@ async function loadPayments() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(payment => `
                     <tr>
-                        <td>${payment.id.substring(0, 8)}...</td>
-                        <td>${payment.order_number}</td>
-                        <td>${payment.customer_name}</td>
+                        <td>${escapeHtml(payment.id.substring(0, 8))}...</td>
+                        <td>${escapeHtml(payment.order_number)}</td>
+                        <td>${escapeHtml(payment.customer_name)}</td>
                         <td>R${parseFloat(payment.amount).toFixed(2)}</td>
-                        <td>${payment.payment_method}</td>
-                        <td><span class="status-badge status-${payment.status}">${payment.status}</span></td>
+                        <td>${escapeHtml(payment.payment_method)}</td>
+                        <td><span class="status-badge status-${escapeHtml(payment.status)}">${escapeHtml(payment.status)}</span></td>
                         <td>${new Date(payment.created_at).toLocaleDateString()}</td>
                     </tr>
                 `).join('');
@@ -321,7 +339,7 @@ async function loadCustomers() {
     try {
         const search = document.getElementById('customerSearch')?.value || '';
         let endpoint = '/api/admin/customers?';
-        if (search) endpoint += `search=${search}`;
+        if (search) endpoint += `search=${encodeURIComponent(search)}`;
         
         const data = await apiRequest(endpoint);
         
@@ -330,14 +348,14 @@ async function loadCustomers() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(customer => `
                     <tr>
-                        <td>${customer.full_name}</td>
-                        <td>${customer.email}</td>
-                        <td>${customer.phone || 'N/A'}</td>
+                        <td>${escapeHtml(customer.full_name)}</td>
+                        <td>${escapeHtml(customer.email)}</td>
+                        <td>${escapeHtml(customer.phone || 'N/A')}</td>
                         <td><span class="status-badge ${customer.is_active ? 'status-active' : 'status-inactive'}">
                             ${customer.is_active ? 'Active' : 'Inactive'}</span></td>
                         <td>${new Date(customer.created_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="viewCustomer('${customer.id}')">
+                            <button class="btn btn-sm btn-primary" onclick="viewCustomer('${escapeHtml(customer.id)}')">
                                 <i class="fas fa-eye"></i> View
                             </button>
                         </td>
@@ -358,8 +376,8 @@ async function loadProducts() {
         const search = document.getElementById('productSearch')?.value || '';
         
         let endpoint = '/api/admin/products?';
-        if (category) endpoint += `category=${category}&`;
-        if (search) endpoint += `search=${search}&`;
+        if (category) endpoint += `category=${encodeURIComponent(category)}&`;
+        if (search) endpoint += `search=${encodeURIComponent(search)}&`;
         
         const data = await apiRequest(endpoint);
         
@@ -370,15 +388,15 @@ async function loadProducts() {
                     const stockClass = product.stock_quantity <= product.low_stock_threshold ? 'status-warning' : '';
                     return `
                     <tr>
-                        <td>${product.sku || 'N/A'}</td>
-                        <td>${product.name}</td>
-                        <td>${product.category}</td>
+                        <td>${escapeHtml(product.sku || 'N/A')}</td>
+                        <td>${escapeHtml(product.name)}</td>
+                        <td>${escapeHtml(product.category)}</td>
                         <td>R${parseFloat(product.price_incl_vat).toFixed(2)}</td>
                         <td><span class="status-badge ${stockClass}">${product.stock_quantity}</span></td>
                         <td><span class="status-badge ${product.is_active ? 'status-active' : 'status-inactive'}">
                             ${product.is_active ? 'Active' : 'Inactive'}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="editProduct('${product.id}')">
+                            <button class="btn btn-sm btn-primary" onclick="editProduct('${escapeHtml(product.id)}')">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                         </td>
@@ -405,17 +423,17 @@ async function loadDiscounts() {
                     const isExpired = discount.expires_at && new Date(discount.expires_at) < new Date();
                     return `
                     <tr>
-                        <td><strong>${discount.code}</strong></td>
-                        <td>${discount.description || 'N/A'}</td>
-                        <td>${discount.discount_type}</td>
-                        <td>${discount.discount_type === 'percentage' ? discount.discount_value + '%' : 'R' + discount.discount_value}</td>
+                        <td><strong>${escapeHtml(discount.code)}</strong></td>
+                        <td>${escapeHtml(discount.description || 'N/A')}</td>
+                        <td>${escapeHtml(discount.discount_type)}</td>
+                        <td>${discount.discount_type === 'percentage' ? escapeHtml(discount.discount_value) + '%' : 'R' + escapeHtml(discount.discount_value)}</td>
                         <td>${discount.times_used || 0}</td>
                         <td>${discount.usage_limit || 'Unlimited'}</td>
                         <td>${discount.expires_at ? new Date(discount.expires_at).toLocaleDateString() : 'Never'}</td>
                         <td><span class="status-badge ${discount.is_active && !isExpired ? 'status-active' : 'status-inactive'}">
                             ${discount.is_active && !isExpired ? 'Active' : 'Inactive'}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="editDiscount('${discount.id}')">
+                            <button class="btn btn-sm btn-primary" onclick="editDiscount('${escapeHtml(discount.id)}')">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                         </td>
@@ -435,7 +453,7 @@ async function loadReturns() {
     try {
         const status = document.getElementById('returnStatusFilter')?.value || '';
         let endpoint = '/api/admin/returns?';
-        if (status) endpoint += `status=${status}`;
+        if (status) endpoint += `status=${encodeURIComponent(status)}`;
         
         const data = await apiRequest(endpoint);
         
@@ -444,14 +462,14 @@ async function loadReturns() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(returnItem => `
                     <tr>
-                        <td>${returnItem.return_number}</td>
-                        <td>${returnItem.order_number}</td>
-                        <td>${returnItem.customer_name || 'N/A'}</td>
-                        <td>${returnItem.reason}</td>
-                        <td><span class="status-badge status-${returnItem.status}">${returnItem.status}</span></td>
+                        <td>${escapeHtml(returnItem.return_number)}</td>
+                        <td>${escapeHtml(returnItem.order_number)}</td>
+                        <td>${escapeHtml(returnItem.customer_name || 'N/A')}</td>
+                        <td>${escapeHtml(returnItem.reason)}</td>
+                        <td><span class="status-badge status-${escapeHtml(returnItem.status)}">${escapeHtml(returnItem.status)}</span></td>
                         <td>${new Date(returnItem.requested_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="viewReturn('${returnItem.id}')">
+                            <button class="btn btn-sm btn-primary" onclick="viewReturn('${escapeHtml(returnItem.id)}')">
                                 <i class="fas fa-eye"></i> View
                             </button>
                         </td>
@@ -475,8 +493,8 @@ async function loadVATRecords() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(record => `
                     <tr>
-                        <td>${record.invoice_number || 'N/A'}</td>
-                        <td>${record.order_number || 'N/A'}</td>
+                        <td>${escapeHtml(record.invoice_number || 'N/A')}</td>
+                        <td>${escapeHtml(record.order_number || 'N/A')}</td>
                         <td>${new Date(record.invoice_date).toLocaleDateString()}</td>
                         <td>R${parseFloat(record.subtotal).toFixed(2)}</td>
                         <td>R${parseFloat(record.vat_amount).toFixed(2)}</td>
@@ -501,8 +519,8 @@ async function loadPolicies() {
             if (data.data && data.data.length > 0) {
                 container.innerHTML = data.data.map(policy => `
                     <div class="policy-item">
-                        <h4>${policy.title}</h4>
-                        <p>Type: ${policy.policy_type} | Version: ${policy.version}</p>
+                        <h4>${escapeHtml(policy.title)}</h4>
+                        <p>Type: ${escapeHtml(policy.policy_type)} | Version: ${escapeHtml(policy.version)}</p>
                         <p>Effective: ${new Date(policy.effective_date).toLocaleDateString()}</p>
                         <span class="status-badge ${policy.is_active ? 'status-active' : 'status-inactive'}">
                             ${policy.is_active ? 'Active' : 'Inactive'}
@@ -522,7 +540,7 @@ async function refreshActivityLogs() {
     try {
         const severity = document.getElementById('activitySeverityFilter')?.value || '';
         let endpoint = '/api/admin/logs/activity?';
-        if (severity) endpoint += `severity=${severity}`;
+        if (severity) endpoint += `severity=${encodeURIComponent(severity)}`;
         
         const data = await apiRequest(endpoint);
         
@@ -531,11 +549,11 @@ async function refreshActivityLogs() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(log => `
                     <tr>
-                        <td>${log.admin_name}</td>
-                        <td>${log.action}</td>
-                        <td>${log.entity_type || 'N/A'}</td>
-                        <td>${log.ip_address}</td>
-                        <td><span class="status-badge status-${log.severity}">${log.severity}</span></td>
+                        <td>${escapeHtml(log.admin_name)}</td>
+                        <td>${escapeHtml(log.action)}</td>
+                        <td>${escapeHtml(log.entity_type || 'N/A')}</td>
+                        <td>${escapeHtml(log.ip_address)}</td>
+                        <td><span class="status-badge status-${escapeHtml(log.severity)}">${escapeHtml(log.severity)}</span></td>
                         <td>${new Date(log.created_at).toLocaleString()}</td>
                     </tr>
                 `).join('');
@@ -552,7 +570,7 @@ async function refreshSecurityEvents() {
     try {
         const severity = document.getElementById('securitySeverityFilter')?.value || '';
         let endpoint = '/api/admin/logs/security?';
-        if (severity) endpoint += `severity=${severity}`;
+        if (severity) endpoint += `severity=${encodeURIComponent(severity)}`;
         
         const data = await apiRequest(endpoint);
         
@@ -561,10 +579,10 @@ async function refreshSecurityEvents() {
             if (data.data && data.data.length > 0) {
                 tbody.innerHTML = data.data.map(event => `
                     <tr>
-                        <td>${event.event_type}</td>
-                        <td>${event.description}</td>
-                        <td><span class="status-badge status-${event.severity}">${event.severity}</span></td>
-                        <td>${event.ip_address || 'N/A'}</td>
+                        <td>${escapeHtml(event.event_type)}</td>
+                        <td>${escapeHtml(event.description)}</td>
+                        <td><span class="status-badge status-${escapeHtml(event.severity)}">${escapeHtml(event.severity)}</span></td>
+                        <td>${escapeHtml(event.ip_address || 'N/A')}</td>
                         <td>${event.resolved ? 'Yes' : 'No'}</td>
                         <td>${new Date(event.created_at).toLocaleString()}</td>
                     </tr>

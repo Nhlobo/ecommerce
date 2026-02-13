@@ -47,8 +47,7 @@ async function initializeDatabase() {
             
             console.log('✓ Admin user created successfully');
             console.log(`   Email: ${adminEmail}`);
-            console.log(`   Password: ${adminPassword}`);
-            console.log('   ⚠️  IMPORTANT: Change this password after first login!\n');
+            console.log('   ⚠️  IMPORTANT: Change the default password after first login!\n');
         }
         
         // Insert sample data
