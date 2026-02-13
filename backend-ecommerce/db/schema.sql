@@ -107,6 +107,15 @@ CREATE TABLE IF NOT EXISTS product_variants (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Wishlist Table
+CREATE TABLE IF NOT EXISTS wishlist (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(customer_id, product_id)
+);
+
 -- =====================================================
 -- ORDER TABLES
 -- =====================================================
@@ -475,6 +484,8 @@ CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_products_sku ON products(sku);
 CREATE INDEX IF NOT EXISTS idx_products_is_active ON products(is_active);
 CREATE INDEX IF NOT EXISTS idx_product_variants_product_id ON product_variants(product_id);
+CREATE INDEX IF NOT EXISTS idx_wishlist_customer_id ON wishlist(customer_id);
+CREATE INDEX IF NOT EXISTS idx_wishlist_product_id ON wishlist(product_id);
 
 -- Order Indexes
 CREATE INDEX IF NOT EXISTS idx_orders_customer_id ON orders(customer_id);

@@ -5,8 +5,277 @@
 
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { query } = require('../db/connection');
 const { validatePagination, validateProduct } = require('../middleware/validator');
+
+// =====================================================
+// CUSTOMER AUTHENTICATION
+// =====================================================
+
+/**
+ * Customer registration
+ */
+router.post('/auth/register', async (req, res) => {
+    try {
+        const { email, password, full_name, phone } = req.body;
+        
+        // Validate required fields
+        if (!email || !password || !full_name) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email, password, and full name are required'
+            });
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email format'
+            });
+        }
+        
+        // Validate password strength
+        if (password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password must be at least 8 characters long'
+            });
+        }
+        
+        // Check if email already exists
+        const existingCustomer = await query(
+            'SELECT id FROM customers WHERE email = $1',
+            [email.toLowerCase()]
+        );
+        
+        if (existingCustomer.rows.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email already registered'
+            });
+        }
+        
+        // Hash password
+        const passwordHash = await bcrypt.hash(password, 12);
+        
+        // Create customer
+        const result = await query(
+            `INSERT INTO customers (email, password_hash, full_name, phone)
+             VALUES ($1, $2, $3, $4)
+             RETURNING id, email, full_name, phone, created_at`,
+            [email.toLowerCase(), passwordHash, full_name, phone || null]
+        );
+        
+        const customer = result.rows[0];
+        
+        // Generate JWT token
+        const token = jwt.sign(
+            { 
+                id: customer.id,
+                email: customer.email,
+                type: 'customer'
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+        );
+        
+        res.status(201).json({
+            success: true,
+            message: 'Registration successful',
+            data: {
+                token,
+                customer: {
+                    id: customer.id,
+                    email: customer.email,
+                    full_name: customer.full_name,
+                    phone: customer.phone
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Registration error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Registration failed. Please try again.'
+        });
+    }
+});
+
+/**
+ * Customer login
+ */
+router.post('/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email and password are required'
+            });
+        }
+        
+        // Find customer
+        const result = await query(
+            'SELECT * FROM customers WHERE email = $1',
+            [email.toLowerCase()]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+        
+        const customer = result.rows[0];
+        
+        // Check if account is active
+        if (!customer.is_active) {
+            return res.status(403).json({
+                success: false,
+                message: 'Account is disabled. Contact support.'
+            });
+        }
+        
+        // Verify password
+        const isPasswordValid = await bcrypt.compare(password, customer.password_hash);
+        
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+        
+        // Generate JWT token
+        const token = jwt.sign(
+            { 
+                id: customer.id,
+                email: customer.email,
+                type: 'customer'
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+        );
+        
+        // Update last login
+        await query(
+            'UPDATE customers SET last_login = NOW() WHERE id = $1',
+            [customer.id]
+        );
+        
+        res.json({
+            success: true,
+            message: 'Login successful',
+            data: {
+                token,
+                customer: {
+                    id: customer.id,
+                    email: customer.email,
+                    full_name: customer.full_name,
+                    phone: customer.phone
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Login failed. Please try again.'
+        });
+    }
+});
+
+/**
+ * Get current customer info (requires authentication)
+ */
+router.get('/auth/user', authenticateCustomer, async (req, res) => {
+    try {
+        const result = await query(
+            `SELECT id, email, full_name, phone, email_verified, is_active, created_at
+             FROM customers WHERE id = $1`,
+            [req.customer.id]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Customer not found'
+            });
+        }
+        
+        res.json({
+            success: true,
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Get current customer error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch customer info'
+        });
+    }
+});
+
+// Simple customer authentication middleware (inline for now)
+async function authenticateCustomer(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+        
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({
+                success: false,
+                message: 'Authentication required'
+            });
+        }
+        
+        const token = authHeader.substring(7);
+        
+        // Verify JWT token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        if (decoded.type !== 'customer') {
+            return res.status(403).json({
+                success: false,
+                message: 'Invalid token type'
+            });
+        }
+        
+        // Get customer
+        const result = await query(
+            'SELECT id, email, full_name FROM customers WHERE id = $1 AND is_active = true',
+            [decoded.id]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid or expired token'
+            });
+        }
+        
+        req.customer = result.rows[0];
+        next();
+    } catch (error) {
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid or expired token'
+            });
+        }
+        
+        console.error('Authentication error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Authentication failed'
+        });
+    }
+}
 
 // =====================================================
 // PUBLIC PRODUCTS
@@ -604,6 +873,133 @@ router.post('/discount/validate', async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to validate discount code'
+        });
+    }
+});
+
+// =====================================================
+// WISHLIST (Customer)
+// =====================================================
+
+/**
+ * Get customer wishlist (requires authentication)
+ */
+router.get('/wishlist', authenticateCustomer, async (req, res) => {
+    try {
+        const result = await query(
+            `SELECT w.id, w.product_id, w.added_at,
+                    p.name, p.description, p.price_incl_vat, p.image_url, p.stock_quantity
+             FROM wishlist w
+             JOIN products p ON w.product_id = p.id
+             WHERE w.customer_id = $1 AND p.is_active = true
+             ORDER BY w.added_at DESC`,
+            [req.customer.id]
+        );
+        
+        res.json({
+            success: true,
+            data: result.rows
+        });
+    } catch (error) {
+        console.error('Get wishlist error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch wishlist'
+        });
+    }
+});
+
+/**
+ * Add product to wishlist (requires authentication)
+ */
+router.post('/wishlist', authenticateCustomer, async (req, res) => {
+    try {
+        const { product_id } = req.body;
+        
+        if (!product_id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Product ID is required'
+            });
+        }
+        
+        // Check if product exists
+        const productResult = await query(
+            'SELECT id FROM products WHERE id = $1 AND is_active = true',
+            [product_id]
+        );
+        
+        if (productResult.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found'
+            });
+        }
+        
+        // Check if already in wishlist
+        const existingResult = await query(
+            'SELECT id FROM wishlist WHERE customer_id = $1 AND product_id = $2',
+            [req.customer.id, product_id]
+        );
+        
+        if (existingResult.rows.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Product already in wishlist'
+            });
+        }
+        
+        // Add to wishlist
+        const result = await query(
+            `INSERT INTO wishlist (customer_id, product_id)
+             VALUES ($1, $2)
+             RETURNING id, product_id, added_at`,
+            [req.customer.id, product_id]
+        );
+        
+        res.status(201).json({
+            success: true,
+            message: 'Product added to wishlist',
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Add to wishlist error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to add to wishlist'
+        });
+    }
+});
+
+/**
+ * Remove product from wishlist (requires authentication)
+ */
+router.delete('/wishlist/:id', authenticateCustomer, async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Delete wishlist item (only if it belongs to the current customer)
+        const result = await query(
+            'DELETE FROM wishlist WHERE id = $1 AND customer_id = $2 RETURNING id',
+            [id, req.customer.id]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Wishlist item not found'
+            });
+        }
+        
+        res.json({
+            success: true,
+            message: 'Product removed from wishlist'
+        });
+    } catch (error) {
+        console.error('Remove from wishlist error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to remove from wishlist'
         });
     }
 });
