@@ -1,0 +1,23 @@
+{
+  "name": "premium-hair-ecommerce-frontend",
+  "version": "1.0.0",
+  "description": "Customer-facing storefront for Premium Hair Wigs & Extensions E-commerce Platform",
+  "main": "index.html",
+  "scripts": {
+    "serve": "npx http-server -p 8000 -c-1",
+    "dev": "npx http-server -p 8000 -c-1 -o"
+  },
+  "keywords": ["ecommerce", "storefront", "frontend", "hair-wigs"],
+  "author": "Premium Hair Wigs & Extensions Pty (Ltd)",
+  "license": "PROPRIETARY",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nhlobo/ecommerce-frontend.git"
+  }
+}
