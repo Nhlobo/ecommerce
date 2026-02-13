@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check authentication
     adminToken = localStorage.getItem('adminToken');
     if (!adminToken) {
-        window.location.href = '/admin/login.html';
+        window.location.href = '/login';
         return;
     }
     
@@ -81,7 +81,7 @@ async function apiRequest(endpoint, options = {}) {
                 // Unauthorized - redirect to login
                 localStorage.removeItem('adminToken');
                 localStorage.removeItem('adminInfo');
-                window.location.href = '/admin/login.html';
+                window.location.href = '/login';
                 return;
             }
             throw new Error(data.message || 'Request failed');
@@ -215,7 +215,7 @@ function loadPanelData(panelName) {
 
 async function loadDashboardOverview() {
     try {
-        const data = await apiRequest('/admin/dashboard/overview');
+        const data = await apiRequest('/api/admin/dashboard/overview');
         
         if (data.success) {
             const overview = data.data;
@@ -252,7 +252,7 @@ async function loadOrders() {
         const status = document.getElementById('orderStatusFilter')?.value || '';
         const search = document.getElementById('orderSearch')?.value || '';
         
-        let endpoint = '/admin/orders?';
+        let endpoint = '/api/admin/orders?';
         if (status) endpoint += `status=${status}&`;
         if (search) endpoint += `search=${search}&`;
         
@@ -289,7 +289,7 @@ async function loadOrders() {
 async function loadPayments() {
     try {
         const status = document.getElementById('paymentStatusFilter')?.value || '';
-        let endpoint = '/admin/payments?';
+        let endpoint = '/api/admin/payments?';
         if (status) endpoint += `status=${status}`;
         
         const data = await apiRequest(endpoint);
@@ -320,7 +320,7 @@ async function loadPayments() {
 async function loadCustomers() {
     try {
         const search = document.getElementById('customerSearch')?.value || '';
-        let endpoint = '/admin/customers?';
+        let endpoint = '/api/admin/customers?';
         if (search) endpoint += `search=${search}`;
         
         const data = await apiRequest(endpoint);
@@ -357,7 +357,7 @@ async function loadProducts() {
         const category = document.getElementById('productCategoryFilter')?.value || '';
         const search = document.getElementById('productSearch')?.value || '';
         
-        let endpoint = '/admin/products?';
+        let endpoint = '/api/admin/products?';
         if (category) endpoint += `category=${category}&`;
         if (search) endpoint += `search=${search}&`;
         
@@ -396,7 +396,7 @@ async function loadProducts() {
 
 async function loadDiscounts() {
     try {
-        const data = await apiRequest('/admin/discounts');
+        const data = await apiRequest('/api/admin/discounts');
         
         if (data.success) {
             const tbody = document.getElementById('discountsTableBody');
@@ -434,7 +434,7 @@ async function loadDiscounts() {
 async function loadReturns() {
     try {
         const status = document.getElementById('returnStatusFilter')?.value || '';
-        let endpoint = '/admin/returns?';
+        let endpoint = '/api/admin/returns?';
         if (status) endpoint += `status=${status}`;
         
         const data = await apiRequest(endpoint);
@@ -468,7 +468,7 @@ async function loadReturns() {
 
 async function loadVATRecords() {
     try {
-        const data = await apiRequest('/admin/compliance/vat');
+        const data = await apiRequest('/api/admin/compliance/vat');
         
         if (data.success) {
             const tbody = document.getElementById('vatRecordsBody');
@@ -494,7 +494,7 @@ async function loadVATRecords() {
 
 async function loadPolicies() {
     try {
-        const data = await apiRequest('/admin/compliance/policies');
+        const data = await apiRequest('/api/admin/compliance/policies');
         
         if (data.success) {
             const container = document.getElementById('policyDocuments');
@@ -521,7 +521,7 @@ async function loadPolicies() {
 async function refreshActivityLogs() {
     try {
         const severity = document.getElementById('activitySeverityFilter')?.value || '';
-        let endpoint = '/admin/logs/activity?';
+        let endpoint = '/api/admin/logs/activity?';
         if (severity) endpoint += `severity=${severity}`;
         
         const data = await apiRequest(endpoint);
@@ -551,7 +551,7 @@ async function refreshActivityLogs() {
 async function refreshSecurityEvents() {
     try {
         const severity = document.getElementById('securitySeverityFilter')?.value || '';
-        let endpoint = '/admin/logs/security?';
+        let endpoint = '/api/admin/logs/security?';
         if (severity) endpoint += `severity=${severity}`;
         
         const data = await apiRequest(endpoint);
@@ -658,12 +658,12 @@ function generateProductReport() {
 
 async function handleLogout() {
     try {
-        await apiRequest('/admin/logout', { method: 'POST' });
+        await apiRequest('/api/admin/logout', { method: 'POST' });
     } catch (error) {
         console.error('Logout error:', error);
     } finally {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminInfo');
-        window.location.href = '/admin/login.html';
+        window.location.href = '/login';
     }
 }

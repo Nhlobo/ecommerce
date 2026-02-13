@@ -88,10 +88,10 @@ app.use('/api', apiLimiter);
 // =====================================================
 
 // Serve frontend static files
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '../frontend-ecommerce')));
 
 // Serve admin dashboard
-app.use('/admin', express.static(path.join(__dirname, '../admin')));
+app.use('/admin', express.static(path.join(__dirname, '../admin-ecommerce')));
 
 // =====================================================
 // API ROUTES
@@ -129,7 +129,7 @@ app.use('/api/*', (req, res) => {
 
 // Serve index.html for non-API routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    res.sendFile(path.join(__dirname, '../frontend-ecommerce/index.html'));
 });
 
 // Global error handler

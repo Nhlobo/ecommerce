@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if already logged in
     const token = localStorage.getItem('adminToken');
     if (token) {
-        window.location.href = '/admin/index.html';
+        window.location.href = '/dashboard';
         return;
     }
     
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
         
         try {
-            const response = await fetch(`${API_BASE}/admin/login`, {
+            const response = await fetch(`${API_BASE}/api/admin/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('adminInfo', JSON.stringify(data.data.admin));
             
             // Redirect to dashboard
-            window.location.href = '/admin/index.html';
+            window.location.href = '/dashboard';
             
         } catch (error) {
             console.error('Login error:', error);
